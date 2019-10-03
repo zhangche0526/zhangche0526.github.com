@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2">
+
+
+
+
+
+
+<meta name="description" content="据说做 Atcoder 可以提高智商？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Atcoder 练习">
+<meta property="og:url" content="http://virgilzhang.me/Atcoder 练习/index.html">
+<meta property="og:site_name" content="Virgil&#39;s Blog">
+<meta property="og:description" content="据说做 Atcoder 可以提高智商？">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://atcoder.jp/img/agc006/a940f1d8303f255e1f91d17a5696633f.png">
+<meta property="og:updated_time" content="2018-04-08T11:48:30.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Atcoder 练习">
+<meta name="twitter:description" content="据说做 Atcoder 可以提高智商？">
+<meta name="twitter:image" content="https://atcoder.jp/img/agc006/a940f1d8303f255e1f91d17a5696633f.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://virgilzhang.me/Atcoder 练习/">
+
+
+
+
+
+  <title>Atcoder 练习 | Virgil's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Virgil's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Ma zweie ra irs manaf chyet oz omnis</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-link">
+          <a href="/link/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-link"></i> <br>
+            
+            友情链接
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://virgilzhang.me/Atcoder 练习/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Virgil von Einzbern">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Virgil's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Atcoder 练习</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-24T10:02:30+08:00">
+                2018-02-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/题解/" itemprop="url" rel="index">
+                    <span itemprop="name">题解</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/Atcoder 练习/" class="leancloud_visitors" data-flag-title="Atcoder 练习">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  据说做 Atcoder 可以提高智商？
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="ARC072"><a href="#ARC072" class="headerlink" title="ARC072"></a><a href="https://arc072.contest.atcoder.jp/assignments" target="_blank" rel="noopener">ARC072</a></h2><h3 id="E"><a href="#E" class="headerlink" title="E"></a><a href="https://arc072.contest.atcoder.jp/tasks/arc072_c" target="_blank" rel="noopener">E</a></h3><blockquote>
+<p>在一个数轴上给定初始位置和结束位置的距离，给定一长度为 $n$ 的序列 $d$ , 每次朝目标的方向走，如果可以使距离变小，就走，反之则原地不动。有 $Q$ 次询问，每次询问修改某一个 $d_i$ 后人是否能到达终点。</p>
+<p>$n,Q \leq 5 \times 10^5$</p>
+</blockquote>
+<p>考虑每次修改后如何判断其是否能到达终点，有两点限制：</p>
+<ul>
+<li>由于随着过程的进行，距离是单调不增的，所以无论如何修改某一操作，都无法使距离增大。</li>
+<li>每一步都有一个临界值，低于其之后一定不可能成功。</li>
+</ul>
+<p>那么可以设 $f_i$ 为 $[0,i)$ 这些操作后中的距离值，$g_i$ 为在保证 $(i,n]$ 操作后成功的条件下距离最小值。</p>
+<p>则 $\text{ans}_i=[[g_i,f_i]\neq\phi]$</p>
+<p><a href="https://github.com/zhangche0526/OICode/blob/master/Repository/ATC/ARC072E.cpp" target="_blank" rel="noopener">ARC072E.cpp</a></p>
+<h2 id="ARC076"><a href="#ARC076" class="headerlink" title="ARC076"></a><a href="https://arc076.contest.atcoder.jp/assignments" target="_blank" rel="noopener">ARC076</a></h2><h3 id="E-1"><a href="#E-1" class="headerlink" title="E"></a><a href="https://arc076.contest.atcoder.jp/tasks/arc076_c" target="_blank" rel="noopener">E</a></h3><blockquote>
+<p>在一个平面直角坐标系中，给定 $n$ 对点，坐标 $(r,c)$ 为整数，且 $r\in [0,R],c\in [0,C]$，保证没有重点，判断是否能在连线不相交的情况下连起所有点对。</p>
+<p>$R,C\leq10^8,n\leq10^5$</p>
+</blockquote>
+<p>发现只有两点都在边界上的情况下才会改变连通性，问题就变成了判断边界上的点对之间的连线是否相交。</p>
+<p>把四条边放到数轴上其实就是个括号匹配合法性问题，用 set 存一下，然后 stack 判断。</p>
+<p><a href="https://github.com/zhangche0526/OICode/blob/master/Repository/ATC/ARC076E.cpp" target="_blank" rel="noopener">ARC076E.cpp</a></p>
+<h2 id="ARC090"><a href="#ARC090" class="headerlink" title="ARC090"></a><a href="https://arc090.contest.atcoder.jp/assignments" target="_blank" rel="noopener">ARC090</a></h2><h3 id="E-2"><a href="#E-2" class="headerlink" title="E"></a><a href="https://arc090.contest.atcoder.jp/tasks/arc090_c" target="_blank" rel="noopener">E</a></h3><blockquote>
+<p>给定一张 $n$ 个点 $m$ 条边的带权无向图和图上的源点 $S$ 和汇点 $T$ . 现在有两个人分别从 $S,T$ 出发，到对方的点，途中只走最短路径，求可能的不相遇（在同一点或同一边相遇都算）的路径方案数。</p>
+<p>$n\leq10^5,m\leq2\times10^5$</p>
+</blockquote>
+<p>不相交这一条件不太好处理，考虑先统计出所有路径方案数，再减去相交的情况。</p>
+<p>统计所有方案数的时候只需要在最短路求的时候 DP 一下即可，记录从 $S$ 点出发的路径距离 $d_S$ 和方案数 $f_S$ ，同理记录 $d_T,f_T$ . 那么总的方案数就是 $f_S[T]^2$</p>
+<p>主要问题在于计算相交的方案数，我们分点相交和边相交统计：</p>
+<ul>
+<li>对于每个 $d_S[u]=d_T[u]$ 的点 $u$ , 对答案做出 $f_S[u]f_T[u]$ 的贡献。</li>
+<li>对于每个 $d_S[u],d_T[u]&lt;\frac{d_S[T]}{2}$ 且 $d_S[u]+d_T[v]+w_{u,v}=d_S[T]$ 的边 $(u,v)$ , 对答案做出 $f_S[u]^2f_T[v]^2$ .</li>
+</ul>
+<p><a href="https://github.com/zhangche0526/OICode/blob/master/Repository/ATC/ARC090E.cpp" target="_blank" rel="noopener">ARC090E.cpp</a></p>
+<h2 id="AGC006"><a href="#AGC006" class="headerlink" title="AGC006"></a><a href="https://agc006.contest.atcoder.jp/assignments" target="_blank" rel="noopener">AGC006</a></h2><h3 id="D"><a href="#D" class="headerlink" title="D"></a><a href="https://agc006.contest.atcoder.jp/tasks/agc006_d" target="_blank" rel="noopener">D</a></h3><blockquote>
+<p>一个金字塔，共有 $n$ 层，金字塔的最底层是一个 $1$ 到 $2n-1$ 的排列，已知这个排列。<br>除最底层以外，金字塔的每个格的数是下一层中它左下方、正下方、右下方这3个数的中位数。<br>求塔顶的数。</p>
+<p><img src="https://atcoder.jp/img/agc006/a940f1d8303f255e1f91d17a5696633f.png" alt="1"></p>
+<p>$n\leq10^5$</p>
+</blockquote>
+<p>关键是如何利用中位数的性质，中位数取值看的是大小关系，于是我们考虑二分答案，每次看是否符合条件。</p>
+<p>每次判断答案是否大于 $\text{mid}$ , 记 $\geq mid$ 的数为 $1$ , $&lt;mid$ 的数为 $0$ ，分两种情况：</p>
+<ul>
+<li>出现相邻两个数相等的情况，看哪个离中间最近，如果 $11$ 离中间最近则答案 $\geq mid$ , 反之答案 $&lt;mid$ .</li>
+<li>相邻的数都不相等，即 $0,1$ 交替出现，这时是否 $\leq mid$ 取决于最左边的位置（或者说取决于那个多）。</li>
+</ul>
+<p><a href="https://github.com/zhangche0526/OICode/blob/master/Repository/ATC/AGC006D.cpp" target="_blank" rel="noopener">AGC006D.cpp</a></p>
+<h2 id="AGC012"><a href="#AGC012" class="headerlink" title="AGC012"></a><a href="https://agc012.contest.atcoder.jp/assignments" target="_blank" rel="noopener">AGC012</a></h2><h3 id="E-3"><a href="#E-3" class="headerlink" title="E"></a><a href="https://agc012.contest.atcoder.jp/tasks/agc012_e" target="_blank" rel="noopener">E</a></h3><blockquote>
+<p>数轴上有 $n$ 个点，给定值 $V$ , 有两种移动方式：</p>
+<ul>
+<li>走到与当前位置距离不超过 $V$ 的点。</li>
+<li>跳到任何一个点，$V$ 变为原先的一半（下取整）。</li>
+</ul>
+<p>求从哪些点出发可以到达所有点至少一次。</p>
+<p>$n,V\leq2\times10^5$</p>
+</blockquote>
+<p>注意到 $V$ 的取值只有 $O(\log_2V)$ 种，可以表示成如下形式：${2^kV},k\in[-K,0]$考虑状压 DP .</p>
+<p>设 $f_S$ 为当 $V$ 的集合为 $S$ 时能走到的前缀长度，同理有 $g_S$ .</p>
+<p>预处理从每个位置在某一个 $V$ 的情况下能走到的左右位置就可以快速计算出 $f,g$ 数组了。具体来说就是设 $L_{i,k}$ 为从 $i$ 出发，$v=2^{-k}V$ 时的能到达的最左边的位置；$R_{i,k}$ 数组同理。</p>
+<p>最后枚举子集 $s\in S$ , 对于每个子集 $s$ , 可以确保 $L_{g_{S-1},0}$ 到 $R_{f_{\complement_{S}s}}$ 区间内所有点都合法。</p>
+<p><a href="https://github.com/zhangche0526/OICode/blob/master/Repository/ATC/AGC012E.cpp" target="_blank" rel="noopener">AGC012E.cpp</a></p>
+<h2 id="AGC015"><a href="#AGC015" class="headerlink" title="AGC015"></a><a href="https://agc015.contest.atcoder.jp/assignments" target="_blank" rel="noopener">AGC015</a></h2><h3 id="C"><a href="#C" class="headerlink" title="C"></a><a href="https://agc015.contest.atcoder.jp/tasks/agc015_c" target="_blank" rel="noopener">C</a></h3><blockquote>
+<p>给定 $n\times m$ 的四连通黑白棋盘，保证黑色的部分构成森林，有 $q$ 个询问，每次询问一个子矩阵的连通块个数。</p>
+<p>$n,m\leq2000,q\leq2\times10^5$</p>
+</blockquote>
+<p>发现这样一个规律：一个子矩阵的连通块个数等于此矩阵中的点数减去边数。</p>
+<p>于是预处理二维前缀和，然后 $O(1)$ 询问，总复杂度 $O(nm+q)$ .</p>
+<p>预处理边数时需要注意，可以分横边竖边分别统计，横边计算时除去右边一列，竖边计算时除去下边一行。</p>
+<p><a href="https://github.com/zhangche0526/OICode/blob/master/Repository/ATC/AGC015C.cpp" target="_blank" rel="noopener">AGC015C.cpp</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/[CEOI2011]Matching/" rel="next" title>
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/积性函数相关问题/" rel="prev" title="数论与积性函数">
+                数论与积性函数 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="Virgil von Einzbern">
+          
+            <p class="site-author-name" itemprop="name">Virgil von Einzbern</p>
+            <p class="site-description motion-element" itemprop="description">An OI & Math & ACGN lover's blog</p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/zhangche0526" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:zhangche0526@gmail.com" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/zhangche0526" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/zhangche0526" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>zhihu</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://user.qzone.qq.com/2542128776" target="_blank" title="QQzone">
+                  
+                    <i class="fa fa-fw fa-globe"></i>QQzone</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://space.bilibili.com/7767985" target="_blank" title="bilibili">
+                  
+                    <i class="fa fa-fw fa-globe"></i>bilibili</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://www.zybuluo.com/KirinBill/note/878927" title="Kirin" target="_blank">Kirin</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://www.zybuluo.com/zzzc18/note/789450" title="zzzc18" target="_blank">zzzc18</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://pb0207.github.io/" title="PB" target="_blank">PB</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://prostkhala.github.io/" title="ST" target="_blank">ST</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ARC072"><span class="nav-number">1.</span> <span class="nav-text">ARC072</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#E"><span class="nav-number">1.1.</span> <span class="nav-text">E</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ARC076"><span class="nav-number">2.</span> <span class="nav-text">ARC076</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#E-1"><span class="nav-number">2.1.</span> <span class="nav-text">E</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ARC090"><span class="nav-number">3.</span> <span class="nav-text">ARC090</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#E-2"><span class="nav-number">3.1.</span> <span class="nav-text">E</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AGC006"><span class="nav-number">4.</span> <span class="nav-text">AGC006</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#D"><span class="nav-number">4.1.</span> <span class="nav-text">D</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AGC012"><span class="nav-number">5.</span> <span class="nav-text">AGC012</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#E-3"><span class="nav-number">5.1.</span> <span class="nav-text">E</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AGC015"><span class="nav-number">6.</span> <span class="nav-text">AGC015</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#C"><span class="nav-number">6.1.</span> <span class="nav-text">C</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Virgil von Einzbern</span>
+
+  
+</div>
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("rVR5kGyMpPkNsCG3Ki5IMKiM-gzGzoHsz", "lWTTT0pG9eDt8OhjKvB0Ede2");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
