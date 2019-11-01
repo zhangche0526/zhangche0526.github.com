@@ -73,18 +73,18 @@
 
 
 
-<meta name="description" content="CNSS Recruit 2019 Crypto Writeup坤坤的代码〇实质上是模意义下斐波那契数列求和，注意到模数很小容易出现循环。 12345678910111213from functools import reducefrom operator import addf = [0xf, 0xf]loop_len = 0n = 1 &amp;lt;&amp;lt; 64 | 2for i in range">
+<meta name="description" content="坤坤的代码〇实质上是模意义下斐波那契数列求和，注意到模数很小容易出现循环。 12345678910111213from functools import reducefrom operator import addf = [0xf, 0xf]loop_len = 0n = 1 &amp;lt;&amp;lt; 64 | 2for i in range(2, n):    f.append((f[i - 1] +">
 <meta name="keywords" content="CTF,Crypto">
 <meta property="og:type" content="article">
-<meta property="og:title" content="FFT&amp;NTT">
+<meta property="og:title" content="CNSS Recruit 2019 Crypto Writeup">
 <meta property="og:url" content="http://virgilzhang.me/CNSS Recruit 2019 Crypto Writeup/index.html">
 <meta property="og:site_name" content="Virgil&#39;s Blog">
-<meta property="og:description" content="CNSS Recruit 2019 Crypto Writeup坤坤的代码〇实质上是模意义下斐波那契数列求和，注意到模数很小容易出现循环。 12345678910111213from functools import reducefrom operator import addf = [0xf, 0xf]loop_len = 0n = 1 &amp;lt;&amp;lt; 64 | 2for i in range">
+<meta property="og:description" content="坤坤的代码〇实质上是模意义下斐波那契数列求和，注意到模数很小容易出现循环。 12345678910111213from functools import reducefrom operator import addf = [0xf, 0xf]loop_len = 0n = 1 &amp;lt;&amp;lt; 64 | 2for i in range(2, n):    f.append((f[i - 1] +">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-11-01T01:50:39.832Z">
+<meta property="og:updated_time" content="2019-11-01T01:52:54.299Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="FFT&amp;NTT">
-<meta name="twitter:description" content="CNSS Recruit 2019 Crypto Writeup坤坤的代码〇实质上是模意义下斐波那契数列求和，注意到模数很小容易出现循环。 12345678910111213from functools import reducefrom operator import addf = [0xf, 0xf]loop_len = 0n = 1 &amp;lt;&amp;lt; 64 | 2for i in range">
+<meta name="twitter:title" content="CNSS Recruit 2019 Crypto Writeup">
+<meta name="twitter:description" content="坤坤的代码〇实质上是模意义下斐波那契数列求和，注意到模数很小容易出现循环。 12345678910111213from functools import reducefrom operator import addf = [0xf, 0xf]loop_len = 0n = 1 &amp;lt;&amp;lt; 64 | 2for i in range(2, n):    f.append((f[i - 1] +">
 
 
 
@@ -120,7 +120,7 @@
 
 
 
-  <title>FFT&NTT | Virgil's Blog</title>
+  <title>CNSS Recruit 2019 Crypto Writeup | Virgil's Blog</title>
   
 
 
@@ -316,7 +316,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">FFT&NTT</h1>
+          <h1 class="post-title" itemprop="name headline">CNSS Recruit 2019 Crypto Writeup</h1>
         
 
         <div class="post-meta">
@@ -346,7 +346,7 @@
 
           
           
-             <span id="/CNSS Recruit 2019 Crypto Writeup/" class="leancloud_visitors" data-flag-title="FFT&NTT">
+             <span id="/CNSS Recruit 2019 Crypto Writeup/" class="leancloud_visitors" data-flag-title="CNSS Recruit 2019 Crypto Writeup">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -377,7 +377,7 @@
       
 
       
-        <h1 id="CNSS-Recruit-2019-Crypto-Writeup"><a href="#CNSS-Recruit-2019-Crypto-Writeup" class="headerlink" title="CNSS Recruit 2019 Crypto Writeup"></a>CNSS Recruit 2019 Crypto Writeup</h1><h2 id="坤坤的代码〇"><a href="#坤坤的代码〇" class="headerlink" title="坤坤的代码〇"></a>坤坤的代码〇</h2><p>实质上是模意义下斐波那契数列求和，注意到模数很小容易出现循环。</p>
+        <h2 id="坤坤的代码〇"><a href="#坤坤的代码〇" class="headerlink" title="坤坤的代码〇"></a>坤坤的代码〇</h2><p>实质上是模意义下斐波那契数列求和，注意到模数很小容易出现循环。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> reduce</span><br><span class="line"><span class="keyword">from</span> operator <span class="keyword">import</span> add</span><br><span class="line">f = [<span class="number">0xf</span>, <span class="number">0xf</span>]</span><br><span class="line">loop_len = <span class="number">0</span></span><br><span class="line">n = <span class="number">1</span> &lt;&lt; <span class="number">64</span> | <span class="number">2</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">2</span>, n):</span><br><span class="line">    f.append((f[i - <span class="number">1</span>] + f[i - <span class="number">2</span>]) % <span class="number">0x10</span>)</span><br><span class="line">    <span class="keyword">if</span> f[i] == <span class="number">0xf</span> <span class="keyword">and</span> f[i<span class="number">-1</span>] == <span class="number">0xf</span>:</span><br><span class="line">        loop_len = i - <span class="number">1</span></span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">ans = (n // loop_len) * reduce(add, f[:<span class="number">-2</span>]) + reduce(add, f[:n % loop_len]) </span><br><span class="line">print(<span class="string">"cnss&#123;%d&#125;"</span> % ans)</span><br><span class="line"><span class="comment">#cnss&#123;159871781972149447364&#125;</span></span><br></pre></td></tr></table></figure>
 
 <h2 id="坤坤的代码Ⅰ"><a href="#坤坤的代码Ⅰ" class="headerlink" title="坤坤的代码Ⅰ"></a>坤坤的代码Ⅰ</h2><p> $\sum_{i|n}^{n\in[1,10^7]}1=\sum_{i=1}^{10^7}\lfloor\frac{10^7}{i}\rfloor$</p>
@@ -661,7 +661,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CNSS-Recruit-2019-Crypto-Writeup"><span class="nav-number">1.</span> <span class="nav-text">CNSS Recruit 2019 Crypto Writeup</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#坤坤的代码〇"><span class="nav-number">1.1.</span> <span class="nav-text">坤坤的代码〇</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#坤坤的代码Ⅰ"><span class="nav-number">1.2.</span> <span class="nav-text">坤坤的代码Ⅰ</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#坤坤的代码Ⅱ"><span class="nav-number">1.3.</span> <span class="nav-text">坤坤的代码Ⅱ</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#坤坤的代码Ⅲ"><span class="nav-number">1.4.</span> <span class="nav-text">坤坤的代码Ⅲ</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#坤坤的代码Ⅳ"><span class="nav-number">1.5.</span> <span class="nav-text">坤坤的代码Ⅳ</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#坤坤的帅气签名"><span class="nav-number">1.6.</span> <span class="nav-text">坤坤的帅气签名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Classical"><span class="nav-number">1.7.</span> <span class="nav-text">Classical</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#KUNKUN’s-Oracle"><span class="nav-number">1.8.</span> <span class="nav-text">KUNKUN’s Oracle</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Ⅰ"><span class="nav-number">1.8.1.</span> <span class="nav-text">Ⅰ</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ⅱ"><span class="nav-number">1.8.2.</span> <span class="nav-text">Ⅱ</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#坤坤的代码〇"><span class="nav-number">1.</span> <span class="nav-text">坤坤的代码〇</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#坤坤的代码Ⅰ"><span class="nav-number">2.</span> <span class="nav-text">坤坤的代码Ⅰ</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#坤坤的代码Ⅱ"><span class="nav-number">3.</span> <span class="nav-text">坤坤的代码Ⅱ</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#坤坤的代码Ⅲ"><span class="nav-number">4.</span> <span class="nav-text">坤坤的代码Ⅲ</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#坤坤的代码Ⅳ"><span class="nav-number">5.</span> <span class="nav-text">坤坤的代码Ⅳ</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#坤坤的帅气签名"><span class="nav-number">6.</span> <span class="nav-text">坤坤的帅气签名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Classical"><span class="nav-number">7.</span> <span class="nav-text">Classical</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#KUNKUN’s-Oracle"><span class="nav-number">8.</span> <span class="nav-text">KUNKUN’s Oracle</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Ⅰ"><span class="nav-number">8.1.</span> <span class="nav-text">Ⅰ</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ⅱ"><span class="nav-number">8.2.</span> <span class="nav-text">Ⅱ</span></a></li></ol></li></ol></div>
             
 
           </div>
