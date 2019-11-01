@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="CTF,Crypto,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2">
+
+
+
+
+
+
+<meta name="description" content="CNSS Recruit 2019 Crypto Writeup坤坤的代码〇实质上是模意义下斐波那契数列求和，注意到模数很小容易出现循环。 12345678910111213from functools import reducefrom operator import addf = [0xf, 0xf]loop_len = 0n = 1 &amp;lt;&amp;lt; 64 | 2for i in range">
+<meta name="keywords" content="CTF,Crypto">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FFT&amp;NTT">
+<meta property="og:url" content="http://virgilzhang.me/CNSS Recruit 2019 Crypto Writeup/index.html">
+<meta property="og:site_name" content="Virgil&#39;s Blog">
+<meta property="og:description" content="CNSS Recruit 2019 Crypto Writeup坤坤的代码〇实质上是模意义下斐波那契数列求和，注意到模数很小容易出现循环。 12345678910111213from functools import reducefrom operator import addf = [0xf, 0xf]loop_len = 0n = 1 &amp;lt;&amp;lt; 64 | 2for i in range">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-11-01T01:50:39.832Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="FFT&amp;NTT">
+<meta name="twitter:description" content="CNSS Recruit 2019 Crypto Writeup坤坤的代码〇实质上是模意义下斐波那契数列求和，注意到模数很小容易出现循环。 12345678910111213from functools import reducefrom operator import addf = [0xf, 0xf]loop_len = 0n = 1 &amp;lt;&amp;lt; 64 | 2for i in range">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://virgilzhang.me/CNSS Recruit 2019 Crypto Writeup/">
+
+
+
+
+
+  <title>FFT&NTT | Virgil's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Virgil's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Ma zweie ra irs manaf chyet oz omnis</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-link">
+          <a href="/link/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-link"></i> <br>
+            
+            友情链接
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://virgilzhang.me/CNSS Recruit 2019 Crypto Writeup/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Virgil von Einzbern">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Virgil's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">FFT&NTT</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-01T09:50:46+08:00">
+                2019-11-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/CNSS Recruit 2019 Crypto Writeup/" class="leancloud_visitors" data-flag-title="FFT&NTT">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="CNSS-Recruit-2019-Crypto-Writeup"><a href="#CNSS-Recruit-2019-Crypto-Writeup" class="headerlink" title="CNSS Recruit 2019 Crypto Writeup"></a>CNSS Recruit 2019 Crypto Writeup</h1><h2 id="坤坤的代码〇"><a href="#坤坤的代码〇" class="headerlink" title="坤坤的代码〇"></a>坤坤的代码〇</h2><p>实质上是模意义下斐波那契数列求和，注意到模数很小容易出现循环。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> reduce</span><br><span class="line"><span class="keyword">from</span> operator <span class="keyword">import</span> add</span><br><span class="line">f = [<span class="number">0xf</span>, <span class="number">0xf</span>]</span><br><span class="line">loop_len = <span class="number">0</span></span><br><span class="line">n = <span class="number">1</span> &lt;&lt; <span class="number">64</span> | <span class="number">2</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">2</span>, n):</span><br><span class="line">    f.append((f[i - <span class="number">1</span>] + f[i - <span class="number">2</span>]) % <span class="number">0x10</span>)</span><br><span class="line">    <span class="keyword">if</span> f[i] == <span class="number">0xf</span> <span class="keyword">and</span> f[i<span class="number">-1</span>] == <span class="number">0xf</span>:</span><br><span class="line">        loop_len = i - <span class="number">1</span></span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">ans = (n // loop_len) * reduce(add, f[:<span class="number">-2</span>]) + reduce(add, f[:n % loop_len]) </span><br><span class="line">print(<span class="string">"cnss&#123;%d&#125;"</span> % ans)</span><br><span class="line"><span class="comment">#cnss&#123;159871781972149447364&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="坤坤的代码Ⅰ"><a href="#坤坤的代码Ⅰ" class="headerlink" title="坤坤的代码Ⅰ"></a>坤坤的代码Ⅰ</h2><p> $\sum_{i|n}^{n\in[1,10^7]}1=\sum_{i=1}^{10^7}\lfloor\frac{10^7}{i}\rfloor$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">n = <span class="number">10000000</span></span><br><span class="line">ans = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, n + <span class="number">1</span>):</span><br><span class="line">    ans += n // i</span><br><span class="line">print(<span class="string">"cnss&#123;%d&#125;"</span> % ans)</span><br><span class="line"><span class="comment">#cnss&#123;162725364&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="坤坤的代码Ⅱ"><a href="#坤坤的代码Ⅱ" class="headerlink" title="坤坤的代码Ⅱ"></a>坤坤的代码Ⅱ</h2><p>使用 MillerRabin 算法重写 is_prime 即可</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> random <span class="keyword">import</span> randint</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">MillerRabin</span><span class="params">(n)</span>:</span></span><br><span class="line">    a = randint(<span class="number">2</span>,n<span class="number">-2</span>)</span><br><span class="line">    s = <span class="number">0</span> </span><br><span class="line">    d = n - <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> (d &amp; <span class="number">1</span>) == <span class="number">0</span>:</span><br><span class="line">        s += <span class="number">1</span></span><br><span class="line">        d &gt;&gt;= <span class="number">1</span></span><br><span class="line"> </span><br><span class="line">    x = pow(a, d, n)</span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> range(s):</span><br><span class="line">        newX = pow(x, <span class="number">2</span>, n)</span><br><span class="line">        <span class="keyword">if</span> newX == <span class="number">1</span> <span class="keyword">and</span> x != <span class="number">1</span> <span class="keyword">and</span> x != n - <span class="number">1</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        x = newX</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">return</span> x == <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">is_Prime</span><span class="params">(n)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> ((n &amp; <span class="number">1</span>) == <span class="number">0</span> <span class="keyword">or</span> n % <span class="number">5</span> == <span class="number">0</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> range(<span class="number">100</span>):</span><br><span class="line">        <span class="keyword">if</span> MillerRabin(n) == <span class="literal">False</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">next_prime</span><span class="params">(n)</span>:</span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    	<span class="keyword">if</span> is_Prime(n):</span><br><span class="line">            <span class="keyword">return</span> n</span><br><span class="line">            n += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">seed = <span class="number">0x5eed</span></span><br><span class="line"><span class="keyword">for</span> _ <span class="keyword">in</span> range(<span class="number">64</span>):</span><br><span class="line">    seed &lt;&lt;= <span class="number">16</span></span><br><span class="line">    seed = next_prime(seed)</span><br><span class="line"></span><br><span class="line">print(<span class="string">"cnss&#123;%s&#125;"</span> % (hex(seed)[<span class="number">-32</span>:]))</span><br><span class="line"><span class="comment">#cnss&#123;004302cd0023009100990725007903d7&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="坤坤的代码Ⅲ"><a href="#坤坤的代码Ⅲ" class="headerlink" title="坤坤的代码Ⅲ"></a>坤坤的代码Ⅲ</h2><p>求满足 $i\in[1,n],i^{\varphi(n)}\equiv1(\mod n),\gcd(i,n)=1,\forall j\in[1,\varphi(n)),i^j\not\equiv1(\mod n)$ 的 $i$ 之和。</p>
+<p>根据欧拉定理：$\gcd(i,n)=1\Rightarrow i^{\varphi(n)}\equiv1(\mod n)$.</p>
+<p>实际上，$67108934=2\times33554467$ ，故很容易排除 $\gcd(i,n)\neq1$ 的 $i$.</p>
+<p>那只要再排除 $\exist j\in[1,\varphi(n)),i^j\equiv1(\mod n)$ 的 $i$ 即可；</p>
+<p>注意到 $\varphi(n)=33554466=2\times3^3\times11\times56489$ 且对于一个 $i$, $\forall d&gt;1,d|\varphi(n), \exist j=\frac{\varphi(n)}{d}\in[1,\varphi(n)),(i^d)^j\equiv1(\mod n)$ ，则可以排除 $i^d$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">n = <span class="number">67108934</span></span><br><span class="line">pn = <span class="number">33554466</span> <span class="comment">#phi(n)</span></span><br><span class="line">ps = [<span class="number">56489</span>, <span class="number">11</span>, <span class="number">621379</span>, <span class="number">3</span>, <span class="number">169467</span>, <span class="number">33</span>, <span class="number">1864137</span>, <span class="number">9</span>, <span class="number">508401</span>, <span class="number">99</span>, <span class="number">5592411</span>, <span class="number">27</span>, <span class="number">1525203</span>, <span class="number">297</span>, <span class="number">16777233</span>, <span class="number">2</span>, <span class="number">112978</span>, <span class="number">22</span>, <span class="number">1242758</span>, <span class="number">6</span>, <span class="number">338934</span>, <span class="number">66</span>, <span class="number">3728274</span>, <span class="number">18</span>, <span class="number">1016802</span>, <span class="number">198</span>, <span class="number">11184822</span>, <span class="number">54</span>, <span class="number">3050406</span>, <span class="number">594</span>, <span class="number">33554466</span>] <span class="comment">#factors of phi(n)</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">for i2 in range(2):</span></span><br><span class="line"><span class="string">    for i3 in range(4):</span></span><br><span class="line"><span class="string">        for i11 in range(2):</span></span><br><span class="line"><span class="string">            for i56489 in range(2):</span></span><br><span class="line"><span class="string">                ps.append((2**i2) * (3**i3) * (11**i11) * (56489**i56489))</span></span><br><span class="line"><span class="string">ps.remove(0)</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line">gg = [<span class="literal">False</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(n)]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,n):</span><br><span class="line">    <span class="keyword">if</span> i%<span class="number">2</span>==<span class="number">1</span> <span class="keyword">and</span> i!=<span class="number">33554467</span>:</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> ps:</span><br><span class="line">            gg[pow(i,j,n)]=<span class="literal">True</span></span><br><span class="line">cnt = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,n):</span><br><span class="line">    <span class="keyword">if</span> i%<span class="number">2</span>==<span class="number">1</span> <span class="keyword">and</span> i!=<span class="number">33554467</span>:</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> gg[i]:</span><br><span class="line">            cnt+=<span class="number">1</span></span><br><span class="line">print(<span class="string">"cnss&#123;%d&#125;"</span> % cnt)</span><br><span class="line"><span class="comment">#cnss&#123;341217052646350&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="坤坤的代码Ⅳ"><a href="#坤坤的代码Ⅳ" class="headerlink" title="坤坤的代码Ⅳ"></a>坤坤的代码Ⅳ</h2><p>注意到题目要求的式子$\sum_{b\in\text{product}(a,2^n)}^{Q|\sum b_i}\prod b_i$可由两个 $\text{repeat}=2^n$ 合并为 $\text{repeat}=2^{n+1}$ ，整体的思路就是求出 $\text{repeat}=2^n$ 时的值，对 $\text{repeat}\neq2^n$ 的情况分解为多个二次幂之和求解，此做法是ⅠⅡⅢ的通解。</p>
+<p>问题在于如何合并。首先原式是低效的枚举判断形式，为了高效找出符合 $Q|\sum b_i$ 的 $b_i$ 就要考虑按 $\sum b_i \mod Q$ 分类 以便合并；其次先求积再求和使得必须枚举 ，不如先求和再求积。</p>
+<p>设<br>$$<br>f_{n,r}=\sum_{b\in \text{product}(a,2^{n})}^{\sum b_i\equiv r(\mod Q) }\prod b_i<br>$$<br>则有<br>$$<br>f_{n+1,r}=\sum_{i=0}^{Q-1}f_{n,i}f_{n,Q-i(\mod i)}<br>$$<br>$n$ 不等的 $f$ 也是一样方法合并</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">P = <span class="number">0x7fffffff</span></span><br><span class="line">Q = <span class="number">0x100</span></span><br><span class="line">n = <span class="number">0x100</span></span><br><span class="line">a = [pow(i, i**i, P) <span class="keyword">for</span> i <span class="keyword">in</span> range(n)]</span><br><span class="line">f = [[<span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(Q)] <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">32</span>)]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> a:</span><br><span class="line">    f[<span class="number">0</span>][i % Q] += i</span><br><span class="line">    f[<span class="number">0</span>][i % Q] %= P * Q</span><br><span class="line"><span class="keyword">for</span> lv <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">32</span>):</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(Q):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(Q):</span><br><span class="line">            f[lv][(i + j) % Q] += f[lv - <span class="number">1</span>][i] * f[lv - <span class="number">1</span>][j]</span><br><span class="line">            f[lv][(i + j) % Q] %= P * Q</span><br><span class="line">print(<span class="string">"cnss&#123;%d&#125;"</span> % f[<span class="number">3</span>][<span class="number">0</span>])</span><br><span class="line"><span class="comment">#cnss&#123;56955670368&#125;</span></span><br><span class="line">print(<span class="string">"cnss&#123;%d&#125;"</span> % f[<span class="number">16</span>][<span class="number">0</span>])</span><br><span class="line"><span class="comment">#cnss&#123;480814021633&#125;</span></span><br><span class="line">ans = [[<span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(Q)] <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">32</span>)]</span><br><span class="line">ans[<span class="number">1</span>] = f[<span class="number">0</span>]</span><br><span class="line"><span class="keyword">for</span> lv <span class="keyword">in</span> range(<span class="number">2</span>, <span class="number">32</span>):</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(Q):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(Q):</span><br><span class="line">            ans[lv][(i + j) % Q] += f[lv - <span class="number">1</span>][i] * ans[lv - <span class="number">1</span>][j]</span><br><span class="line">            ans[lv][(i + j) % Q] %= P * Q</span><br><span class="line"></span><br><span class="line">print(<span class="string">"cnss&#123;%d&#125;"</span> % ans[<span class="number">31</span>][<span class="number">0</span>])</span><br><span class="line"><span class="comment">#cnss&#123;66559571170&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="坤坤的帅气签名"><a href="#坤坤的帅气签名" class="headerlink" title="坤坤的帅气签名"></a>坤坤的帅气签名</h2><p>使用 CRT 加速 RSA 签名时， $c$ 通过 $c_p\equiv m^d(\mod p),c_q\equiv m^d(\mod q)$ 合并得到。</p>
+<p>不妨假设在计算 $c_p$ 时出现错误得到一个错误值 $c_p’\neq c_p$  而 $c_q$ 是正确的。</p>
+<p>记由 $c_p’,c_q$ 合并出来的值为 $c’$，则有<br>$$<br>q=\gcd((c’^e-m)\mod n,n)<br>$$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> math <span class="keyword">import</span> gcd</span><br><span class="line"><span class="keyword">from</span> binascii <span class="keyword">import</span> a2b_hex</span><br><span class="line"><span class="keyword">from</span> gmpy2 <span class="keyword">import</span> invert <span class="keyword">as</span> inv</span><br><span class="line"></span><br><span class="line">n = <span class="number">109453943855659271832842942560403561756870609158731037775662385351197002786101553313741128891698293686816823489928849957259082253354725368827785717195435302172225437710056999830798824021337641459232307818433049338256971969203037801338219292565591596823843084807425759066355695095315215256626194447457000935219</span></span><br><span class="line">e = <span class="number">65537</span></span><br><span class="line">m = <span class="number">664571392881790422435277591416285461838362142565</span></span><br><span class="line">c_ = <span class="number">95361947547578027398844873615910853429249196840875210666696459318107820034497276956275479240249952230477194176576310896173689631161740588202298964125311372712579942498844950844776941548440922576913828770721063505802129955338545026791678869888011537973251863068824639014310112791103793602257959620977303959166</span></span><br><span class="line">c = <span class="number">106039992459918542481959218676031242448622622921702794062900589891335070401325885060562630102179872636335524488857155980500818588740868617342364258438580858663620359722304271036542646651953697809289409672464136670237497042598885667755826964760657089501369425580341586708889011946540651753137711555709077414486</span></span><br><span class="line">q = gcd(pow(c_, e, n)-m, n)</span><br><span class="line">p = n // q</span><br><span class="line"></span><br><span class="line">d = inv(e, (p - <span class="number">1</span>) * (q - <span class="number">1</span>))</span><br><span class="line">m = pow(c, d, n)</span><br><span class="line">s = str(a2b_hex(hex(m)[<span class="number">2</span>:]), encoding=<span class="string">"utf8"</span>)</span><br><span class="line"></span><br><span class="line">print(s)</span><br><span class="line"><span class="comment">#cnss&#123;Y0u_h4ve_1earn3d_Fau1t_Att4ck&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Classical"><a href="#Classical" class="headerlink" title="Classical"></a>Classical</h2><p>首先枚举 key_size , 计算按当前 key_size 将 cipher_text 分割，用 hamming_distance 量化各个 key_size 的可能性，从而得出最可能的 key_size. 之后将按确定的 key_size 分组的 cipher_text 每组相应位置分别取出串联成重组串，在用频率攻击解决 singlechar_xor 问题即可。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> base64 <span class="keyword">import</span> b64decode</span><br><span class="line"><span class="keyword">from</span> binascii <span class="keyword">import</span> b2a_hex</span><br><span class="line"><span class="keyword">from</span> itertools <span class="keyword">import</span> combinations</span><br><span class="line"></span><br><span class="line">CHARACTER_FREQ =&#123;</span><br><span class="line">    <span class="string">'a'</span>: <span class="number">0.0651738</span>, <span class="string">'b'</span>: <span class="number">0.0124248</span>, <span class="string">'c'</span>: <span class="number">0.0217339</span>, <span class="string">'d'</span>: <span class="number">0.0349835</span>, <span class="string">'e'</span>: <span class="number">0.1041442</span>, <span class="string">'f'</span>: <span class="number">0.0197881</span>, <span class="string">'g'</span>: <span class="number">0.0158610</span>,</span><br><span class="line">    <span class="string">'h'</span>: <span class="number">0.0492888</span>, <span class="string">'i'</span>: <span class="number">0.0558094</span>, <span class="string">'j'</span>: <span class="number">0.0009033</span>, <span class="string">'k'</span>: <span class="number">0.0050529</span>, <span class="string">'l'</span>: <span class="number">0.0331490</span>, <span class="string">'m'</span>: <span class="number">0.0202124</span>, <span class="string">'n'</span>: <span class="number">0.0564513</span>,</span><br><span class="line">    <span class="string">'o'</span>: <span class="number">0.0596302</span>, <span class="string">'p'</span>: <span class="number">0.0137645</span>, <span class="string">'q'</span>: <span class="number">0.0008606</span>, <span class="string">'r'</span>: <span class="number">0.0497563</span>, <span class="string">'s'</span>: <span class="number">0.0515760</span>, <span class="string">'t'</span>: <span class="number">0.0729357</span>, <span class="string">'u'</span>: <span class="number">0.0225134</span>,</span><br><span class="line">    <span class="string">'v'</span>: <span class="number">0.0082903</span>, <span class="string">'w'</span>: <span class="number">0.0171272</span>, <span class="string">'x'</span>: <span class="number">0.0013692</span>, <span class="string">'y'</span>: <span class="number">0.0145984</span>, <span class="string">'z'</span>: <span class="number">0.0007836</span>, <span class="string">' '</span>: <span class="number">0.1918182</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">repeating_key_xor</span><span class="params">(plaintext, key)</span>:</span></span><br><span class="line">    ciphertext = <span class="string">b''</span></span><br><span class="line">    i = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> byte <span class="keyword">in</span> plaintext:</span><br><span class="line">        ciphertext += bytes([byte ^ key[i]])</span><br><span class="line">        i = i + <span class="number">1</span> <span class="keyword">if</span> i &lt; len(key) - <span class="number">1</span> <span class="keyword">else</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">return</span> ciphertext</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_english_score</span><span class="params">(input_bytes)</span>:</span></span><br><span class="line">    score = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> byte <span class="keyword">in</span> input_bytes:</span><br><span class="line">        score += CHARACTER_FREQ.get(chr(byte).lower(), <span class="number">0</span>)</span><br><span class="line">    <span class="keyword">return</span> score</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">singlechar_xor</span><span class="params">(input_bytes, key_value)</span>:</span></span><br><span class="line">    output = <span class="string">b''</span></span><br><span class="line">    <span class="keyword">for</span> char <span class="keyword">in</span> input_bytes:</span><br><span class="line">        output += bytes([char ^ key_value])</span><br><span class="line">    <span class="keyword">return</span> output</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">singlechar_xor_brute_force</span><span class="params">(ciphertext)</span>:</span></span><br><span class="line">    candidates = []</span><br><span class="line">    <span class="keyword">for</span> key_candidate <span class="keyword">in</span> range(<span class="number">256</span>):</span><br><span class="line">        plaintext_candidate = singlechar_xor(ciphertext, key_candidate)</span><br><span class="line">        candidate_score = get_english_score(plaintext_candidate)</span><br><span class="line">        result = &#123;</span><br><span class="line">            <span class="string">'key'</span>: key_candidate,</span><br><span class="line">            <span class="string">'score'</span>: candidate_score,</span><br><span class="line">            <span class="string">'plaintext'</span>: plaintext_candidate</span><br><span class="line">        &#125;</span><br><span class="line">        candidates.append(result)</span><br><span class="line">    <span class="keyword">return</span> sorted(candidates, key=<span class="keyword">lambda</span> c: c[<span class="string">'score'</span>], reverse=<span class="literal">True</span>)[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hamming_distance</span><span class="params">(binary_seq_1, binary_seq_2)</span>:</span></span><br><span class="line">    <span class="keyword">assert</span> len(binary_seq_1) == len(binary_seq_2)</span><br><span class="line">    dist = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> bit1, bit2 <span class="keyword">in</span> zip(binary_seq_1, binary_seq_2):</span><br><span class="line">        diff = bit1 ^ bit2</span><br><span class="line">        dist += sum([<span class="number">1</span> <span class="keyword">for</span> bit <span class="keyword">in</span> bin(diff) <span class="keyword">if</span> bit == <span class="string">'1'</span>])</span><br><span class="line">    <span class="keyword">return</span> dist</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">break_repeating_key_xor</span><span class="params">(binary_data)</span>:</span></span><br><span class="line">    normalized_distances = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> key_size <span class="keyword">in</span> range(<span class="number">2</span>, <span class="number">41</span>):</span><br><span class="line">        chunks = [binary_data[i:i + key_size] <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, len(binary_data), key_size)][:<span class="number">4</span>]</span><br><span class="line">        distance = <span class="number">0</span></span><br><span class="line">        pairs = combinations(chunks, <span class="number">2</span>)</span><br><span class="line">        <span class="keyword">for</span> (x, y) <span class="keyword">in</span> pairs:</span><br><span class="line">            distance += hamming_distance(x, y)</span><br><span class="line">        distance /= <span class="number">6</span></span><br><span class="line">        normalized_distance = distance / key_size</span><br><span class="line">        normalized_distances[key_size] = normalized_distance</span><br><span class="line">    possible_key_sizes = sorted(normalized_distances, key=normalized_distances.get)[:<span class="number">3</span>]</span><br><span class="line">    possible_plaintexts = []</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> d <span class="keyword">in</span> possible_key_sizes:</span><br><span class="line">        key = <span class="string">b''</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(d):</span><br><span class="line">            block = <span class="string">b''</span></span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(i, len(binary_data), d):</span><br><span class="line">                block += bytes([binary_data[j]])</span><br><span class="line">            key += bytes([singlechar_xor_brute_force(block)[<span class="string">'key'</span>]])</span><br><span class="line">        possible_plaintexts.append((repeating_key_xor(binary_data, key), key))</span><br><span class="line">    <span class="keyword">return</span> max(possible_plaintexts, key=<span class="keyword">lambda</span> k: get_english_score(k[<span class="number">0</span>]))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">write_text</span><span class="params">()</span>:</span></span><br><span class="line">    cipher = <span class="string">b'GxBHXgcWBhc6QgB4VhAXAAEUAx4AdgcIRwYMHAJ/XRo0E1UaDRcUERkLbSoIQQ8JUgwsERU+BFUDCgBRQh4AMkkTWw8LUg06Q1MzHwUdQlJGBwheHw9HQAAKBUU9VFMoHhwaAF4UFQQcdh0PVgBFGgAtEREtExQdEQEUAx4Adg0SXVUsFEU3UBotBVUMAFJDCx4AJUVHUQIEEQ5/RhotEwZOAgBbFUwKOEkPVhxFGgA+VV0WVh0PExcUEQkAOEkVXB0AAUU7UB4+BR5JAV4UEAkBdggJV04SGgwrVF8dAwFOCx0UERkGPkkVXB0AAUUsVBZ/P1UHC1JcBx5FNQECVgUWSSQxVVM2GFUdCh9RQhwAJA8SXgsWUgwsEQc3EwcLRR9bEAlFMgwLWgkNBjE3UB1/HxtOERpRQg4XMwgTW04RGgQrERUtGRhOCAsUDwUWIhsCQB1FAAA6WgBxP1UCCgRRQhgKdgECUhxFGgAtEQAvExQFSVJNBxhFIQwLX04sUg4xXgQLHhQaRR9BEQUGdgEGRwZFE0U5UAF/GxocAFJEDgkEJQAJVE4WHRAxVUgWVhIcBBxAQiVFOAwRVhxFAQQoERJ/ERoKARdHEUwCOVIqSk4IGxYrQxYsBVlOEhpRDEwWPgxHRA8JGRZzEQctExQKFlJbDEwRPgxHVBwKBws7CzIxElUXAAYYQg4cdgECUhgAHEl/eFMrHhwADlJZG0wJOR8CEw8WUhc+QxYeBVUPCwsUEQQAdgsCXwcAFkUoWAc3VhMPCQFRQg8KOxkGQQtL'</span></span><br><span class="line">    cipher = b2a_hex(b64decode(cipher))</span><br><span class="line">    c = cipher.decode(encoding=<span class="string">'utf-8'</span>)</span><br><span class="line">    a = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(c)//<span class="number">2</span>):</span><br><span class="line">        a.append(int(c[i*<span class="number">2</span>],<span class="number">0x10</span>)*<span class="number">0x10</span>+int(c[i*<span class="number">2</span>+<span class="number">1</span>],<span class="number">0x10</span>))</span><br><span class="line">    m = <span class="string">''</span>.join([chr(i) <span class="keyword">for</span> i <span class="keyword">in</span> a])</span><br><span class="line">    <span class="keyword">with</span> open(<span class="string">"task_r.txt"</span>, <span class="string">"w"</span>) <span class="keyword">as</span> output_file:</span><br><span class="line">        output_file.write(m)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">"task_r.txt"</span>) <span class="keyword">as</span> input_file:</span><br><span class="line">    data = bytes(input_file.read(), encoding = <span class="string">"utf8"</span>)</span><br><span class="line">result = break_repeating_key_xor(data)</span><br><span class="line">print(<span class="string">"cnss&#123;%s&#125;"</span> % result[<span class="number">1</span>].decode())</span><br><span class="line"><span class="comment">#cnss&#123;Vig3nere_1s_vuner4ble&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="KUNKUN’s-Oracle"><a href="#KUNKUN’s-Oracle" class="headerlink" title="KUNKUN’s Oracle"></a>KUNKUN’s Oracle</h2><h3 id="Ⅰ"><a href="#Ⅰ" class="headerlink" title="Ⅰ"></a>Ⅰ</h3><p>由两个同余方程可以得到两个 $X,n|(X^2-a)$，那么 $n|gcd(X_1^2-a,X_2^2-a)$</p>
+<p>不妨假设 $n=gcd(X_1^2-a,X_2^2-a)$ 求出 <code>flag_one_int</code> 发现每次结果相同，<code>flag_one</code> 为 <code>cnss{Gu3ss_n_1s_s0_e4sy}</code></p>
+<h3 id="Ⅱ"><a href="#Ⅱ" class="headerlink" title="Ⅱ"></a>Ⅱ</h3><p>模数为 $n=pq$ 的二次同余方程有 $4$ 解或无解。</p>
+<p>为简化此问题，不如考虑 $a=1$ 的情况：</p>
+<p>对 $$X^2\equiv 1(\mod n)\tag{1}$$ 显然有 $1,n-1$ 两解，且剩余两解在模意义下互为相反数。</p>
+<p>考虑方程<br>$$<br>X^2\equiv1(\mod p)\tag{2}\<br>$$<br>$$<br>X^2\equiv1(\mod q)\tag{3}<br>$$</p>
+<p>对于 $(1)$ 的任意一个非平凡解 $X$ 都满足 $(2),(3)$，即有 $p|X\pm1,q|X\mp1$，那么 $\gcd(X-1,n)\neq1$，由此可得 $p$ 或 $q$ .</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> random <span class="keyword">import</span> randint</span><br><span class="line"><span class="keyword">from</span> hashlib <span class="keyword">import</span> sha256</span><br><span class="line"><span class="keyword">from</span> itertools <span class="keyword">import</span> product</span><br><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> reduce</span><br><span class="line"><span class="keyword">from</span> operator <span class="keyword">import</span> add</span><br><span class="line"><span class="keyword">from</span> base64 <span class="keyword">import</span> b64decode</span><br><span class="line"><span class="keyword">from</span> binascii <span class="keyword">import</span> a2b_hex</span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> math <span class="keyword">import</span> gcd</span><br><span class="line"><span class="keyword">from</span> gmpy2 <span class="keyword">import</span> invert <span class="keyword">as</span> inv</span><br><span class="line"></span><br><span class="line">sh = remote(<span class="string">"47.100.39.140"</span>,<span class="number">2333</span>)</span><br><span class="line">msg1 = str(sh.recv(), encoding = <span class="string">"utf8"</span>)</span><br><span class="line"></span><br><span class="line">sh.recv()</span><br><span class="line">ch = [chr(i) <span class="keyword">for</span> i <span class="keyword">in</span> list(range(<span class="number">48</span>,<span class="number">58</span>))+list(range(<span class="number">65</span>,<span class="number">91</span>))+list(range(<span class="number">97</span>,<span class="number">123</span>))]</span><br><span class="line">c1 = msg1[<span class="number">16</span>:<span class="number">32</span>]</span><br><span class="line">c2 = msg1[<span class="number">37</span>:<span class="number">-1</span>]</span><br><span class="line"><span class="keyword">for</span> s <span class="keyword">in</span> product(ch, repeat = <span class="number">4</span>):</span><br><span class="line">	<span class="keyword">if</span>(sha256(bytes(reduce(add, s) + c1, encoding = <span class="string">"utf8"</span>)).hexdigest() == c2):</span><br><span class="line">		sh.sendline(reduce(add, s))</span><br><span class="line">		<span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">sh.recv()</span><br><span class="line">msg2=sh.recv()</span><br><span class="line">flag_one_int = <span class="number">2438052038959711679742325770590891988999025531859378600317</span></span><br><span class="line">xor_res = int(msg2[msg2.find(<span class="string">b'[*] (n ^ flag_one_int):'</span>) + <span class="number">23</span> : msg2.find(<span class="string">b'[*] Secret is an unknown random string, e = 65537.'</span>) - <span class="number">2</span>])</span><br><span class="line">c = int(msg2[msg2.find(<span class="string">b'[*] pow(secret_int, e, n):'</span>) + <span class="number">26</span> : msg2.find(<span class="string">b'[*] Give me secret, then I will tell you flag_two.'</span>) - <span class="number">1</span>])</span><br><span class="line">n = flag_one_int ^ xor_res</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Solve_the_equation</span><span class="params">()</span>:</span></span><br><span class="line">	sh.sendline(<span class="string">"S"</span>)</span><br><span class="line">	sh.recv()</span><br><span class="line">	sh.recv()</span><br><span class="line"></span><br><span class="line">	sh.sendline(<span class="string">"0x1"</span>)</span><br><span class="line">	sh.recv()</span><br><span class="line">	msg3=sh.recv()</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> int(msg3[: msg3.find(<span class="string">b'[*] Options:'</span>) - <span class="number">1</span>])</span><br><span class="line"></span><br><span class="line">X = Solve_the_equation()</span><br><span class="line"><span class="keyword">if</span> X == <span class="number">1</span> <span class="keyword">or</span> X == n - <span class="number">1</span>:</span><br><span class="line">	X = Solve_the_equation()</span><br><span class="line"></span><br><span class="line">e = <span class="number">65537</span></span><br><span class="line">p = gcd(X + <span class="number">1</span>, n)</span><br><span class="line">q = n // p</span><br><span class="line"></span><br><span class="line">d = inv(e, (p - <span class="number">1</span>) * (q - <span class="number">1</span>))</span><br><span class="line">m = pow(c, d, n)</span><br><span class="line">s = str(a2b_hex(hex(m)[<span class="number">2</span>:]), encoding=<span class="string">"utf8"</span>)</span><br><span class="line"></span><br><span class="line">sh.sendline(<span class="string">"G"</span>)</span><br><span class="line">sh.recv()</span><br><span class="line"></span><br><span class="line">sh.sendline(s)</span><br><span class="line">print(str(sh.recv(), encoding=<span class="string">"utf8"</span>), end=<span class="string">''</span>)</span><br><span class="line"><span class="comment">#cnss&#123;Prim3_factoriz4tion_1s_n0t_e4sy&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>##Linear Fucking Shit Register    </p>
+<p>经典的 LFSR 已知长度 $2m$ 加密数据流推出 mask 的问题</p>
+<p>$2m$ 个位之间可列出 $m$ 元一次模 $2$ 意义下线性方程组，可借助矩阵求逆求解，但本题所给数据得出的系数矩阵是奇异的，assert附加了条件使得方程有唯一解，不过这种方法时间复杂度高且特殊情况不好处理。</p>
+<p><del>依稀记得芜湖集训的时候听zzt说数学题不会就上BM解递推式乱搞</del> </p>
+<p>准确来说BM可以 $O(n^2)$ 求常系数线性递推式，正适合题设情况。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> reduce</span><br><span class="line"><span class="keyword">from</span> operator <span class="keyword">import</span> xor</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">seq2int</span><span class="params">(a)</span>:</span></span><br><span class="line">    res = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> a:</span><br><span class="line">        res &lt;&lt;= <span class="number">1</span></span><br><span class="line">        res |= i</span><br><span class="line">    <span class="keyword">return</span> res</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">BM</span><span class="params">(S)</span>:</span></span><br><span class="line">    m = <span class="number">0</span></span><br><span class="line">    N,f = <span class="number">0</span>,One</span><br><span class="line">    N0,f0 = <span class="number">-1</span>,One</span><br><span class="line">    n = len(S)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> N &lt; n:</span><br><span class="line">        <span class="keyword">if</span> S[N] != f.dot(S[:N]):</span><br><span class="line">            <span class="keyword">if</span> <span class="number">2</span>*m&gt;N:</span><br><span class="line">                f = f + f0 * X**(N-N0)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                f0, f = f, f + f0 * X**(N-N0)</span><br><span class="line">                N0 = N</span><br><span class="line">                m = N+<span class="number">1</span>-m</span><br><span class="line">        N += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> f[:<span class="number">-1</span>]</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Poly</span><span class="params">(list)</span>:</span> <span class="comment">#binary polynomial</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__add__</span><span class="params">(self,other)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> len(self)&lt;len(other):</span><br><span class="line">            <span class="keyword">return</span> other + self</span><br><span class="line"></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            k = len(self) - len(other)</span><br><span class="line">            new = [a^b <span class="keyword">for</span> (a,b) <span class="keyword">in</span> zip(self,([<span class="number">0</span>]*k)+other)]</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                <span class="keyword">while</span> new[<span class="number">0</span>] == <span class="number">0</span>:</span><br><span class="line">                    new.pop(<span class="number">0</span>)</span><br><span class="line">            <span class="keyword">except</span> IndexError:</span><br><span class="line">                new = []</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> Poly(new)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">dot</span><span class="params">(self,S)</span>:</span></span><br><span class="line">        m = len(self)</span><br><span class="line">        N = len(S)</span><br><span class="line">        C = self[:<span class="number">-1</span>]</span><br><span class="line">        S = S[N-m+<span class="number">1</span>:]</span><br><span class="line">        <span class="keyword">return</span> dot(C,S)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__mul__</span><span class="params">(self,other)</span>:</span></span><br><span class="line">        deg = len(self) + len(other) - <span class="number">2</span></span><br><span class="line">        prod = [<span class="number">0</span>]*(deg + <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">for</span> k,x <span class="keyword">in</span> enumerate(self):</span><br><span class="line">            <span class="keyword">for</span> j,y <span class="keyword">in</span> enumerate(other):</span><br><span class="line">                prod[k+j] ^= (x&amp;y)</span><br><span class="line">        <span class="keyword">return</span> Poly(prod)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__pow__</span><span class="params">(self,ex)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> ex==<span class="number">0</span>:</span><br><span class="line">            <span class="keyword">return</span> Poly([<span class="number">1</span>])</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> self*(self**(ex<span class="number">-1</span>))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dot</span><span class="params">(x,y)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> reduce(xor,[a&amp;b <span class="keyword">for</span> (a,b) <span class="keyword">in</span> zip(x,y)],<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">X = Poly([<span class="number">1</span>,<span class="number">0</span>])</span><br><span class="line">One =  Poly([<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line">out_int = <span class="number">0x85d1a4924ccc6cefb56a52d2</span></span><br><span class="line">out_seq = [ord(c) - ord(<span class="string">'0'</span>) <span class="keyword">for</span> c <span class="keyword">in</span> bin(out_int)[<span class="number">2</span>:]]</span><br><span class="line">mask = BM(out_seq)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">LFSR_inv</span><span class="params">(state, mask)</span>:</span></span><br><span class="line">    str=bin(state)[<span class="number">2</span>:].zfill(<span class="number">48</span>)</span><br><span class="line">    new=str[<span class="number">-1</span>:]+str[:<span class="number">-1</span>]</span><br><span class="line">    new=int(new,<span class="number">2</span>)                   </span><br><span class="line">    i = (new &amp; mask) &amp; <span class="number">0xffffffffffff</span></span><br><span class="line">    lastbit = <span class="number">0</span></span><br><span class="line">    <span class="keyword">while</span> i != <span class="number">0</span>:</span><br><span class="line">        lastbit ^= (i &amp; <span class="number">1</span>)</span><br><span class="line">        i = i &gt;&gt; <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> state &gt;&gt; <span class="number">1</span> | lastbit &lt;&lt; <span class="number">47</span></span><br><span class="line"></span><br><span class="line">ans = seq2int(out_seq[:<span class="number">48</span>])</span><br><span class="line"><span class="keyword">for</span> _ <span class="keyword">in</span> range(<span class="number">48</span>):</span><br><span class="line">    ans = LFSR_inv(ans, seq2int(mask))</span><br><span class="line"></span><br><span class="line">print(<span class="string">"cnss&#123;%s%s&#125;"</span> % (hex(ans)[<span class="number">2</span>:], hex(seq2int(mask))[<span class="number">2</span>:]))</span><br><span class="line"><span class="comment">#cnss&#123;a11ceb0bffffffbeefc0ff3e&#125;</span></span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CTF/" rel="tag"># CTF</a>
+          
+            <a href="/tags/Crypto/" rel="tag"># Crypto</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/AFO 随想/" rel="next" title="AFO 随想">
+                <i class="fa fa-chevron-left"></i> AFO 随想
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="Virgil von Einzbern">
+          
+            <p class="site-author-name" itemprop="name">Virgil von Einzbern</p>
+            <p class="site-description motion-element" itemprop="description">An OI & Math & ACGN lover's blog</p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">52</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">53</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/zhangche0526" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:zhangche0526@gmail.com" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/zhangche0526" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/zhangche0526" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>zhihu</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://user.qzone.qq.com/2542128776" target="_blank" title="QQzone">
+                  
+                    <i class="fa fa-fw fa-globe"></i>QQzone</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://space.bilibili.com/7767985" target="_blank" title="bilibili">
+                  
+                    <i class="fa fa-fw fa-globe"></i>bilibili</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://www.zybuluo.com/KirinBill/note/878927" title="Kirin" target="_blank">Kirin</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://www.zybuluo.com/zzzc18/note/789450" title="zzzc18" target="_blank">zzzc18</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://pb0207.github.io/" title="PB" target="_blank">PB</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://prostkhala.github.io/" title="ST" target="_blank">ST</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CNSS-Recruit-2019-Crypto-Writeup"><span class="nav-number">1.</span> <span class="nav-text">CNSS Recruit 2019 Crypto Writeup</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#坤坤的代码〇"><span class="nav-number">1.1.</span> <span class="nav-text">坤坤的代码〇</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#坤坤的代码Ⅰ"><span class="nav-number">1.2.</span> <span class="nav-text">坤坤的代码Ⅰ</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#坤坤的代码Ⅱ"><span class="nav-number">1.3.</span> <span class="nav-text">坤坤的代码Ⅱ</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#坤坤的代码Ⅲ"><span class="nav-number">1.4.</span> <span class="nav-text">坤坤的代码Ⅲ</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#坤坤的代码Ⅳ"><span class="nav-number">1.5.</span> <span class="nav-text">坤坤的代码Ⅳ</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#坤坤的帅气签名"><span class="nav-number">1.6.</span> <span class="nav-text">坤坤的帅气签名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Classical"><span class="nav-number">1.7.</span> <span class="nav-text">Classical</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#KUNKUN’s-Oracle"><span class="nav-number">1.8.</span> <span class="nav-text">KUNKUN’s Oracle</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Ⅰ"><span class="nav-number">1.8.1.</span> <span class="nav-text">Ⅰ</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ⅱ"><span class="nav-number">1.8.2.</span> <span class="nav-text">Ⅱ</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Virgil von Einzbern</span>
+
+  
+</div>
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("rVR5kGyMpPkNsCG3Ki5IMKiM-gzGzoHsz", "lWTTT0pG9eDt8OhjKvB0Ede2");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
