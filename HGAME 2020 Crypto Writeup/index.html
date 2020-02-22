@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="CTF,Crypto,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2">
+
+
+
+
+
+
+<meta name="description" content="InfantRSA | solved给了 $p,q$ 直接由 $m\equiv c^{(p-1)(q-1)}(\mod pq)$ 得到明文 hgame{t3Xt6O0k_R5A!!!} Affine | solved暴力求得 $A=14,B=13$ hgame{M4th_u5Ed_iN_cRYpt0} not_One-time | solved又是道暴力2333 每次可以从 Oracle 得到一个">
+<meta name="keywords" content="CTF,Crypto">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HGAME 2020 Crypto Writeup">
+<meta property="og:url" content="http://virgilzhang.me/HGAME 2020 Crypto Writeup/index.html">
+<meta property="og:site_name" content="Virgil&#39;s Blog">
+<meta property="og:description" content="InfantRSA | solved给了 $p,q$ 直接由 $m\equiv c^{(p-1)(q-1)}(\mod pq)$ 得到明文 hgame{t3Xt6O0k_R5A!!!} Affine | solved暴力求得 $A=14,B=13$ hgame{M4th_u5Ed_iN_cRYpt0} not_One-time | solved又是道暴力2333 每次可以从 Oracle 得到一个">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-02-22T10:18:23.156Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HGAME 2020 Crypto Writeup">
+<meta name="twitter:description" content="InfantRSA | solved给了 $p,q$ 直接由 $m\equiv c^{(p-1)(q-1)}(\mod pq)$ 得到明文 hgame{t3Xt6O0k_R5A!!!} Affine | solved暴力求得 $A=14,B=13$ hgame{M4th_u5Ed_iN_cRYpt0} not_One-time | solved又是道暴力2333 每次可以从 Oracle 得到一个">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://virgilzhang.me/HGAME 2020 Crypto Writeup/">
+
+
+
+
+
+  <title>HGAME 2020 Crypto Writeup | Virgil's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Virgil's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Ma zweie ra irs manaf chyet oz omnis</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-link">
+          <a href="/link/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-link"></i> <br>
+            
+            友情链接
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://virgilzhang.me/HGAME 2020 Crypto Writeup/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Virgil von Einzbern">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Virgil's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">HGAME 2020 Crypto Writeup</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-22T18:18:18+08:00">
+                2020-02-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/HGAME 2020 Crypto Writeup/" class="leancloud_visitors" data-flag-title="HGAME 2020 Crypto Writeup">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="InfantRSA-solved"><a href="#InfantRSA-solved" class="headerlink" title="InfantRSA | solved"></a>InfantRSA | solved</h2><p>给了 $p,q$ 直接由 $m\equiv c^{(p-1)(q-1)}(\mod pq)$ 得到明文</p>
+<p><code>hgame{t3Xt6O0k_R5A!!!}</code></p>
+<h2 id="Affine-solved"><a href="#Affine-solved" class="headerlink" title="Affine | solved"></a>Affine | solved</h2><p>暴力求得 $A=14,B=13$</p>
+<p><code>hgame{M4th_u5Ed_iN_cRYpt0}</code></p>
+<h2 id="not-One-time-solved"><a href="#not-One-time-solved" class="headerlink" title="not_One-time | solved"></a>not_One-time | solved</h2><p>又是道暴力2333</p>
+<p>每次可以从 Oracle 得到一个 flag 每个字符异或上一个随机生成的相同长度的 key_stream, 重点在于题目保证 key_stream 的自符只包括大小写和数字。</p>
+<p>OTP的话显然没什么好办法，只能每次得到密文后对每一位试可能的字符，如果按此假设的那一位不合法，则排除。无限获取密文，知道每一位上都只剩一种可能性为止，则得到 flag.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">from</span> base64 <span class="keyword">import</span> b64decode</span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">L = len(b64decode(remote(<span class="string">"47.98.192.231"</span>,<span class="number">25001</span>).recv()))</span><br><span class="line">psbChar = [[c <span class="keyword">for</span> c <span class="keyword">in</span> <span class="string">"""!"#$%&amp;'()*+,-./0123456789:;&lt;=&gt;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz&#123;|&#125;~"""</span>] <span class="keyword">for</span> _ <span class="keyword">in</span> range(L)]</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">check</span><span class="params">()</span>:</span></span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> range(L):</span><br><span class="line">		<span class="keyword">if</span> len(psbChar[i]) != <span class="number">1</span>:</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">	<span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line"><span class="keyword">while</span> <span class="keyword">not</span> check():</span><br><span class="line">	s = b64decode(remote(<span class="string">"47.98.192.231"</span>,<span class="number">25001</span>).recv())</span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> range(L):</span><br><span class="line">		print(i)</span><br><span class="line">		<span class="keyword">for</span> c <span class="keyword">in</span> psbChar[i]:</span><br><span class="line">			<span class="keyword">if</span> chr(ord(c)^s[i]) <span class="keyword">not</span> <span class="keyword">in</span> string.ascii_letters+string.digits:</span><br><span class="line">				psbChar[i].remove(c)</span><br><span class="line"></span><br><span class="line">ans=<span class="string">''</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(L):</span><br><span class="line">	ans += psbChar[i][<span class="number">0</span>];</span><br><span class="line">print(ans)</span><br></pre></td></tr></table></figure>
+
+<p><code>hgame{r3us1nG+M3$5age-&amp;&amp;~rEduC3d_k3Y-5P4Ce}</code></p>
+<h2 id="Reorder-solved"><a href="#Reorder-solved" class="headerlink" title="Reorder | solved"></a>Reorder | solved</h2><p>重排加密，输入一个和 flag 一样长且每个字符不一样的字符串，从此得知重排规则，即可解密。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">org = <span class="string">"abcdefghijklmnopqrstuvwxyz123456"</span></span><br><span class="line">srt = <span class="string">"khaifgenjlpcdomb1xqyvwu4z26st53r"</span></span><br><span class="line">c = <span class="string">"+Uh$&#123;jemt5LampIgiT3AmuR!T0&#125;Pe!n_"</span></span><br><span class="line">ans = <span class="string">''</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(c)):</span><br><span class="line">	ans += c[srt.find(org[i])]</span><br><span class="line">print(ans)</span><br></pre></td></tr></table></figure>
+
+<p><code>hgame{jU$t+5ImpL3_PeRmuTATi0n!!}</code></p>
+<h2 id="Verification-code-solved"><a href="#Verification-code-solved" class="headerlink" title="Verification_code | solved"></a>Verification_code | solved</h2><p>暴力</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> hashlib <span class="keyword">import</span> sha256</span><br><span class="line"><span class="keyword">from</span> itertools <span class="keyword">import</span> product</span><br><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> reduce</span><br><span class="line"><span class="keyword">from</span> operator <span class="keyword">import</span> add</span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">sh = remote(<span class="string">"47.98.192.231"</span>,<span class="number">25678</span>)</span><br><span class="line"></span><br><span class="line">msg1=str(sh.recv(), encoding=<span class="string">"utf8"</span>)</span><br><span class="line">print(msg1,end=<span class="string">''</span>)</span><br><span class="line">print(str(sh.recv(), encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br><span class="line"></span><br><span class="line">ch = [chr(i) <span class="keyword">for</span> i <span class="keyword">in</span> list(range(<span class="number">48</span>,<span class="number">58</span>))+list(range(<span class="number">65</span>,<span class="number">91</span>))+list(range(<span class="number">97</span>,<span class="number">123</span>))]</span><br><span class="line"></span><br><span class="line">c1 = msg1[<span class="number">12</span>:<span class="number">28</span>]</span><br><span class="line">c2 = msg1[<span class="number">33</span>:<span class="number">-1</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> s <span class="keyword">in</span> product(ch, repeat = <span class="number">4</span>):</span><br><span class="line">	<span class="keyword">if</span>(sha256(bytes(reduce(add, s) + c1, encoding = <span class="string">"utf8"</span>)).hexdigest() == c2):</span><br><span class="line">		print(reduce(add, s))</span><br><span class="line">		sh.sendline(reduce(add, s))</span><br><span class="line">		<span class="keyword">break</span></span><br><span class="line">        </span><br><span class="line">print(str(sh.recv(), encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br><span class="line">print(str(sh.recv(), encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br><span class="line">print(<span class="string">"I like playing Hgame"</span>)</span><br><span class="line">sh.sendline(<span class="string">"I like playing Hgame"</span>)</span><br><span class="line">print(str(sh.recv(), encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br><span class="line">print(str(sh.recv(), encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br><span class="line">print(str(sh.recv(), encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br></pre></td></tr></table></figure>
+
+<p><code>hgame{It3Rt0O|S+I5_u$3fu1~Fo2_6rUtE-f0Rc3}</code></p>
+<h2 id="Remainder-solved"><a href="#Remainder-solved" class="headerlink" title="Remainder | solved"></a>Remainder | solved</h2><p>中国剩余定理，类似 RSA ?</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">p = <span class="number">94598296305713376652540411631949434301396235111673372738276754654188267010805522542068004453137678598891335408170277601381944584279339362056579262308427544671688614923839794522671378559276784734758727213070403838632286280473450086762286706863922968723202830398266220533885129175502142533600559292388005914561</span></span><br><span class="line">q = <span class="number">150088216417404963893679242888992998793257903343994792697939121738029477790454833496600101388493792476973514786401036309378542808470513073408894727406158296404360452232777491992630316999043165374635001806841520490997788796152678742544032835808854339130676283497122770901196468323977265095016407164510827505883</span></span><br><span class="line">r = <span class="number">145897736096689096151704740327665176308625097484116713780050311198775607465862066406830851710261868913835866335107146242979359964945125214420821146670919741118254402096944139483988745450480989706524191669371208210272907563936516990473246615375022630708213486725809819360033470468293100926616729742277729705727</span></span><br><span class="line">bp = <span class="number">78430786011650521224561924814843614294806974988599591058915520397518526296422791089692107488534157589856611229978068659970976374971658909987299759719533519358232180721480719635602515525942678988896727128884803638257227848176298172896155463813264206982505797613067215182849559356336015634543181806296355552543</span> </span><br><span class="line">bq = <span class="number">49576356423474222188205187306884167620746479677590121213791093908977295803476203510001060180959190917276817541142411523867555147201992480220531431019627681572335103200586388519695931348304970651875582413052411224818844160945410884130575771617919149619341762325633301313732947264125576866033934018462843559419</span> </span><br><span class="line">br = <span class="number">48131077962649497833189292637861442767562147447040134411078884485513840553188185954383330236190253388937785530658279768620213062244053151614962893628946343595642513870766877810534480536737200302699539396810545420021054225204683428522820350356470883574463849146422150244304147618195613796399010492125383322922</span></span><br><span class="line">e=<span class="number">65537</span></span><br><span class="line"><span class="keyword">from</span> gmpy2 <span class="keyword">import</span> invert <span class="keyword">as</span> inv</span><br><span class="line"><span class="keyword">from</span> binascii <span class="keyword">import</span> a2b_hex</span><br><span class="line"><span class="keyword">from</span> Crypto.Util <span class="keyword">import</span> number</span><br><span class="line">c = (inv(q*r, p) * q*r * bp + inv(p*r, q) * p*r * bq + inv(p*q, r) * p*q * br) % (p * q * r)</span><br><span class="line">d = inv(e, (p - <span class="number">1</span>) * (q - <span class="number">1</span>) * (r - <span class="number">1</span>))</span><br><span class="line">m = pow(c, d, p * q * r)</span><br><span class="line">print(str(number.long_to_bytes(m),encoding=<span class="string">'utf-8'</span>))</span><br></pre></td></tr></table></figure>
+
+<p><code>hgame{CrT_w0Nt+6Oth3R_mE!!!}</code></p>
+<h2 id="Inv-solved"><a href="#Inv-solved" class="headerlink" title="Inv | solved"></a>Inv | solved</h2><p>排列换位置，看成乘法，写个逆运算即可。</p>
+<p>(正解是扩展欧几里得？无所谓了</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">s595 = <span class="string">b'\xc8&amp;\xc1E\xbe*\xc5\x84\xdb1\x05\x9b\xc0\xf2\xac/\x0b0\x8d\'\xc2b\x89\x93\xa6\xcd\xe1\x1b\xf4H\xffa\x90A\xf7,(\xea?\xa8\xa0\x8b\xf1\xf9"X\n\x86fj\x074\x7fBO\xd4F\xbd\xe6\xd9\xa7\xaf\x8a\x8c\xde\xab;!PT\x15)+w\xbc\x00&gt;\xc6g\xc3\x85=9K\xb6&lt;\xb7x\xaeUG\x83vk\xa9\xf6&#123;\x03Y\x87\x14e\xfd\xed@i\xcc.\xd1\xebo\x106\xe2\xe7\xd7\xeeu\x9e\xfe\x95^R\xfb8\x04\xb4S\x16\xe0\xad\xd8\x98n\xca\xe4\xdd\xd2\xc7\x99l\xb3\\2L\xa3\x1d:_\x12\xb87\x17\x01\xb1#~q\x1c\t\xe8\xdar\xef\xcb\x0c\xe5\x80\xdf\xc9y\x0e`\xe9\x94\xd0\xcfW\x1f5\xf5h\xbf\xba\x91\xb9d\xfcM\x81\xec\x88\xb2c\x9f\xa4J|\xd3m\xd6s\xd5\x92\x9d\x9a3\xa2\xb5\xfa\x19N\xa1\x82][\xf8\x06\x13\xdcC\x1e\x1a\xaa\xc4tz\x08\x8f%$D\xbb\x97 \xce\x96V\xe3\x02I\x18\x11\x0f\r\xf3p\x8e\xa5Z-\xf0&#125;\xb0Q\x9c'</span></span><br><span class="line">s739 = <span class="string">b'U\x17\x8aE\xa6\x19\xab\x7fd0\xd2)\xc0\xae\xcc/G_\xe3\'\r\xfb\xaf\x00\xb1hgi-\xc1\xffa\x8d\t&amp;\x99k\x95\x93\xa8.\x07\xcd\x87\x01\xe8\x89\x86\xf6f48F\xdc\x96\xd4`P\xd6!\xfe\xc4B:\xd31C\x9f\x1dT&#123;2c9\x0bY5#\xf7\xb8H\xe0Db\xb6wv\xe1\xbbI\x8f\x83l\x80\xa9\x04q\x03\xf0m\xf4\x1bp\x8e\xc6u\xfd\x16$\x06\xf9Z\xec\xa2\xcb\xd7V\xb9\xd1\xbdt^\xe7\xe2\xac\x18\xb4\x15=n\xad\xd8S+\xca\xeb\xdd\xd0;\x84\xe6\x08\x8c3\xb3\x90\x02\xc8&#125;\xee\xea7K\x98\xde\x8b~\xcf\xfa\x11\n\xda\xa4L\xa3\x0cWQ\xdf\xc9yj\x9d\xe9\xfcJO\x1a\x1f\xdb\xf5M\xbf\x9e e\x1c*\x9b\x85\xe5\x88\xb2\xc7\xf2\x91\x10\x0e,\xd9&lt;s\xd5\xef\xb0@|\xc3\xbc(\xb5"\xa1\x82\xa7[\xf8A\x13\x14\xc2\x1eN\xaao\xedr\xba\xcex]\x92\x05\x97\x12\xc5%\\\xb7&gt;R\x9a\x94\x0fX\xf3\xbe?\xa5\xe4\xa0z\xf16\x81\x9c'</span></span><br><span class="line">flag = <span class="string">b"\\-\xa5&#123;\xb9\x85J @\xfa\x91\x0b\x88\r4I\x7f\xb9\xe5\r\xc0\x84\x8f\xa6\xc0i\xb0\xa4\x1b\x8fIw\x84'\xa2\xa4\x00\x91\x87\x10\r\\\x8c\x12"</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Mul</span><span class="params">(S, X)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> bytes([ S[x] <span class="keyword">for</span> x <span class="keyword">in</span> X ])</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Pow</span><span class="params">(X, E)</span>:</span></span><br><span class="line">    Y = X</span><br><span class="line">    E = bin(E)[<span class="number">3</span>:]</span><br><span class="line">    <span class="keyword">for</span> e <span class="keyword">in</span> E:</span><br><span class="line">        Y = Mul(Y, Y)</span><br><span class="line">        <span class="keyword">if</span> e==<span class="string">'1'</span>:</span><br><span class="line">            Y = Mul(X, Y)</span><br><span class="line">    <span class="keyword">return</span> Y</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Dvd</span><span class="params">(a,b)</span>:</span></span><br><span class="line">	<span class="keyword">return</span> bytes([a.find(i) <span class="keyword">for</span> i <span class="keyword">in</span> b])</span><br><span class="line"></span><br><span class="line">s144=Dvd(s595,s739)</span><br><span class="line">s19=Dvd(Pow(s144,<span class="number">4</span>),s595)</span><br><span class="line">s11=Dvd(Pow(s19,<span class="number">7</span>),s144)</span><br><span class="line">s=Dvd(Pow(s11,<span class="number">13</span>),s144)</span><br><span class="line">print(str(Dvd(s,flag),encoding=<span class="string">'utf-8'</span>))</span><br></pre></td></tr></table></figure>
+
+<p><code>hgame{U_kN0w~tH3+eXtEnD-EuC1iD34n^A1G0rIthM}</code></p>
+<h2 id="notRC4-solved"><a href="#notRC4-solved" class="headerlink" title="notRC4 | solved"></a>notRC4 | solved</h2><p>RC4密码，给出了乱序的 Sbox ，穷举 j 还原出原先的 Sbox 即可解密。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">c = <span class="string">b'ry\x80\xe3*\xb1\x04m\r\x12R\xeaW\x80\xba\xf7\xc5\x02g8Z\xfe\xb8f\xf5\xdc\xec\xdb\xe6\xe6\xa6\xc61\x92\xeb6K\xa1"\x01A\xfbP\xf1P\xf0\x8dQ\x81~'</span></span><br><span class="line"><span class="keyword">for</span> init_j <span class="keyword">in</span> range(<span class="number">256</span>):</span><br><span class="line">	Sbox =  [<span class="number">40</span>, <span class="number">226</span>, <span class="number">202</span>, <span class="number">106</span>, <span class="number">96</span>, <span class="number">6</span>, <span class="number">208</span>, <span class="number">142</span>, <span class="number">83</span>, <span class="number">90</span>, <span class="number">37</span>, <span class="number">217</span>, <span class="number">149</span>, <span class="number">30</span>, <span class="number">157</span>, <span class="number">238</span>, <span class="number">71</span>, <span class="number">114</span>, <span class="number">117</span>, <span class="number">190</span>, <span class="number">76</span>, <span class="number">154</span>, <span class="number">135</span>, <span class="number">201</span>, <span class="number">221</span>, <span class="number">35</span>, <span class="number">245</span>, <span class="number">239</span>, <span class="number">146</span>, <span class="number">153</span>, <span class="number">33</span>, <span class="number">212</span>, <span class="number">123</span>, <span class="number">244</span>, <span class="number">178</span>, <span class="number">89</span>, <span class="number">145</span>, <span class="number">189</span>, <span class="number">183</span>, <span class="number">227</span>, <span class="number">171</span>, <span class="number">198</span>, <span class="number">34</span>, <span class="number">182</span>, <span class="number">205</span>, <span class="number">158</span>, <span class="number">194</span>, <span class="number">133</span>, <span class="number">126</span>, <span class="number">251</span>, <span class="number">195</span>, <span class="number">88</span>, <span class="number">206</span>, <span class="number">15</span>, <span class="number">161</span>, <span class="number">70</span>, <span class="number">82</span>, <span class="number">64</span>, <span class="number">170</span>, <span class="number">86</span>, <span class="number">131</span>, <span class="number">147</span>, <span class="number">36</span>, <span class="number">39</span>, <span class="number">47</span>, <span class="number">235</span>, <span class="number">172</span>, <span class="number">12</span>, <span class="number">228</span>, <span class="number">78</span>, <span class="number">116</span>, <span class="number">118</span>, <span class="number">50</span>, <span class="number">9</span>, <span class="number">1</span>, <span class="number">23</span>, <span class="number">169</span>, <span class="number">81</span>, <span class="number">53</span>, <span class="number">98</span>, <span class="number">218</span>, <span class="number">237</span>, <span class="number">152</span>, <span class="number">159</span>, <span class="number">139</span>, <span class="number">121</span>, <span class="number">61</span>, <span class="number">250</span>, <span class="number">124</span>, <span class="number">151</span>, <span class="number">211</span>, <span class="number">187</span>, <span class="number">141</span>, <span class="number">49</span>, <span class="number">43</span>, <span class="number">128</span>, <span class="number">137</span>, <span class="number">162</span>, <span class="number">233</span>, <span class="number">200</span>, <span class="number">188</span>, <span class="number">11</span>, <span class="number">109</span>, <span class="number">110</span>, <span class="number">254</span>, <span class="number">234</span>, <span class="number">253</span>, <span class="number">180</span>, <span class="number">69</span>, <span class="number">247</span>, <span class="number">42</span>, <span class="number">115</span>, <span class="number">155</span>, <span class="number">193</span>, <span class="number">209</span>, <span class="number">199</span>, <span class="number">32</span>, <span class="number">130</span>, <span class="number">111</span>, <span class="number">225</span>, <span class="number">204</span>, <span class="number">164</span>, <span class="number">101</span>, <span class="number">249</span>, <span class="number">236</span>, <span class="number">20</span>, <span class="number">224</span>, <span class="number">191</span>, <span class="number">166</span>, <span class="number">160</span>, <span class="number">17</span>, <span class="number">16</span>, <span class="number">68</span>, <span class="number">52</span>, <span class="number">192</span>, <span class="number">207</span>, <span class="number">104</span>, <span class="number">144</span>, <span class="number">26</span>, <span class="number">72</span>, <span class="number">67</span>, <span class="number">44</span>, <span class="number">246</span>, <span class="number">184</span>, <span class="number">74</span>, <span class="number">10</span>, <span class="number">197</span>, <span class="number">93</span>, <span class="number">181</span>, <span class="number">243</span>, <span class="number">112</span>, <span class="number">5</span>, <span class="number">94</span>, <span class="number">8</span>, <span class="number">148</span>, <span class="number">223</span>, <span class="number">210</span>, <span class="number">143</span>, <span class="number">56</span>, <span class="number">73</span>, <span class="number">103</span>, <span class="number">129</span>, <span class="number">77</span>, <span class="number">196</span>, <span class="number">92</span>, <span class="number">120</span>, <span class="number">175</span>, <span class="number">63</span>, <span class="number">168</span>, <span class="number">22</span>, <span class="number">62</span>, <span class="number">174</span>, <span class="number">127</span>, <span class="number">215</span>, <span class="number">65</span>, <span class="number">51</span>, <span class="number">220</span>, <span class="number">41</span>, <span class="number">179</span>, <span class="number">2</span>, <span class="number">167</span>, <span class="number">125</span>, <span class="number">7</span>, <span class="number">29</span>, <span class="number">21</span>, <span class="number">66</span>, <span class="number">14</span>, <span class="number">24</span>, <span class="number">105</span>, <span class="number">113</span>, <span class="number">214</span>, <span class="number">99</span>, <span class="number">231</span>, <span class="number">255</span>, <span class="number">84</span>, <span class="number">85</span>, <span class="number">138</span>, <span class="number">242</span>, <span class="number">91</span>, <span class="number">150</span>, <span class="number">25</span>, <span class="number">222</span>, <span class="number">156</span>, <span class="number">248</span>, <span class="number">48</span>, <span class="number">108</span>, <span class="number">252</span>, <span class="number">79</span>, <span class="number">107</span>, <span class="number">230</span>, <span class="number">38</span>, <span class="number">55</span>, <span class="number">132</span>, <span class="number">54</span>, <span class="number">186</span>, <span class="number">45</span>, <span class="number">173</span>, <span class="number">80</span>, <span class="number">134</span>, <span class="number">232</span>, <span class="number">60</span>, <span class="number">240</span>, <span class="number">4</span>, <span class="number">102</span>, <span class="number">95</span>, <span class="number">122</span>, <span class="number">18</span>, <span class="number">136</span>, <span class="number">229</span>, <span class="number">140</span>, <span class="number">3</span>, <span class="number">216</span>, <span class="number">100</span>, <span class="number">87</span>, <span class="number">75</span>, <span class="number">0</span>, <span class="number">31</span>, <span class="number">185</span>, <span class="number">28</span>, <span class="number">97</span>, <span class="number">46</span>, <span class="number">241</span>, <span class="number">219</span>, <span class="number">213</span>, <span class="number">59</span>, <span class="number">177</span>, <span class="number">57</span>, <span class="number">203</span>, <span class="number">163</span>, <span class="number">165</span>, <span class="number">19</span>, <span class="number">176</span>, <span class="number">13</span>, <span class="number">119</span>, <span class="number">27</span>, <span class="number">58</span>]</span><br><span class="line">	i = len(c)</span><br><span class="line">	j = init_j</span><br><span class="line">	<span class="keyword">for</span> _ <span class="keyword">in</span> range(len(c)):</span><br><span class="line">		Sbox[i], Sbox[j] = Sbox[j], Sbox[i]</span><br><span class="line">		j = (j - Sbox[i]) % <span class="number">256</span></span><br><span class="line">		i -= <span class="number">1</span></span><br><span class="line">	i = j = <span class="number">0</span></span><br><span class="line">	k = []</span><br><span class="line">	<span class="keyword">for</span> _ <span class="keyword">in</span> range(len(c)):</span><br><span class="line">		i += <span class="number">1</span></span><br><span class="line">		j = (j + Sbox[i]) % <span class="number">256</span></span><br><span class="line">		Sbox[i], Sbox[j] = Sbox[j], Sbox[i]</span><br><span class="line">		t = (Sbox[i] + Sbox[j]) % <span class="number">256</span></span><br><span class="line">		k.append(Sbox[t])</span><br><span class="line">	<span class="keyword">if</span> Sbox==[<span class="number">40</span>, <span class="number">226</span>, <span class="number">202</span>, <span class="number">106</span>, <span class="number">96</span>, <span class="number">6</span>, <span class="number">208</span>, <span class="number">142</span>, <span class="number">83</span>, <span class="number">90</span>, <span class="number">37</span>, <span class="number">217</span>, <span class="number">149</span>, <span class="number">30</span>, <span class="number">157</span>, <span class="number">238</span>, <span class="number">71</span>, <span class="number">114</span>, <span class="number">117</span>, <span class="number">190</span>, <span class="number">76</span>, <span class="number">154</span>, <span class="number">135</span>, <span class="number">201</span>, <span class="number">221</span>, <span class="number">35</span>, <span class="number">245</span>, <span class="number">239</span>, <span class="number">146</span>, <span class="number">153</span>, <span class="number">33</span>, <span class="number">212</span>, <span class="number">123</span>, <span class="number">244</span>, <span class="number">178</span>, <span class="number">89</span>, <span class="number">145</span>, <span class="number">189</span>, <span class="number">183</span>, <span class="number">227</span>, <span class="number">171</span>, <span class="number">198</span>, <span class="number">34</span>, <span class="number">182</span>, <span class="number">205</span>, <span class="number">158</span>, <span class="number">194</span>, <span class="number">133</span>, <span class="number">126</span>, <span class="number">251</span>, <span class="number">195</span>, <span class="number">88</span>, <span class="number">206</span>, <span class="number">15</span>, <span class="number">161</span>, <span class="number">70</span>, <span class="number">82</span>, <span class="number">64</span>, <span class="number">170</span>, <span class="number">86</span>, <span class="number">131</span>, <span class="number">147</span>, <span class="number">36</span>, <span class="number">39</span>, <span class="number">47</span>, <span class="number">235</span>, <span class="number">172</span>, <span class="number">12</span>, <span class="number">228</span>, <span class="number">78</span>, <span class="number">116</span>, <span class="number">118</span>, <span class="number">50</span>, <span class="number">9</span>, <span class="number">1</span>, <span class="number">23</span>, <span class="number">169</span>, <span class="number">81</span>, <span class="number">53</span>, <span class="number">98</span>, <span class="number">218</span>, <span class="number">237</span>, <span class="number">152</span>, <span class="number">159</span>, <span class="number">139</span>, <span class="number">121</span>, <span class="number">61</span>, <span class="number">250</span>, <span class="number">124</span>, <span class="number">151</span>, <span class="number">211</span>, <span class="number">187</span>, <span class="number">141</span>, <span class="number">49</span>, <span class="number">43</span>, <span class="number">128</span>, <span class="number">137</span>, <span class="number">162</span>, <span class="number">233</span>, <span class="number">200</span>, <span class="number">188</span>, <span class="number">11</span>, <span class="number">109</span>, <span class="number">110</span>, <span class="number">254</span>, <span class="number">234</span>, <span class="number">253</span>, <span class="number">180</span>, <span class="number">69</span>, <span class="number">247</span>, <span class="number">42</span>, <span class="number">115</span>, <span class="number">155</span>, <span class="number">193</span>, <span class="number">209</span>, <span class="number">199</span>, <span class="number">32</span>, <span class="number">130</span>, <span class="number">111</span>, <span class="number">225</span>, <span class="number">204</span>, <span class="number">164</span>, <span class="number">101</span>, <span class="number">249</span>, <span class="number">236</span>, <span class="number">20</span>, <span class="number">224</span>, <span class="number">191</span>, <span class="number">166</span>, <span class="number">160</span>, <span class="number">17</span>, <span class="number">16</span>, <span class="number">68</span>, <span class="number">52</span>, <span class="number">192</span>, <span class="number">207</span>, <span class="number">104</span>, <span class="number">144</span>, <span class="number">26</span>, <span class="number">72</span>, <span class="number">67</span>, <span class="number">44</span>, <span class="number">246</span>, <span class="number">184</span>, <span class="number">74</span>, <span class="number">10</span>, <span class="number">197</span>, <span class="number">93</span>, <span class="number">181</span>, <span class="number">243</span>, <span class="number">112</span>, <span class="number">5</span>, <span class="number">94</span>, <span class="number">8</span>, <span class="number">148</span>, <span class="number">223</span>, <span class="number">210</span>, <span class="number">143</span>, <span class="number">56</span>, <span class="number">73</span>, <span class="number">103</span>, <span class="number">129</span>, <span class="number">77</span>, <span class="number">196</span>, <span class="number">92</span>, <span class="number">120</span>, <span class="number">175</span>, <span class="number">63</span>, <span class="number">168</span>, <span class="number">22</span>, <span class="number">62</span>, <span class="number">174</span>, <span class="number">127</span>, <span class="number">215</span>, <span class="number">65</span>, <span class="number">51</span>, <span class="number">220</span>, <span class="number">41</span>, <span class="number">179</span>, <span class="number">2</span>, <span class="number">167</span>, <span class="number">125</span>, <span class="number">7</span>, <span class="number">29</span>, <span class="number">21</span>, <span class="number">66</span>, <span class="number">14</span>, <span class="number">24</span>, <span class="number">105</span>, <span class="number">113</span>, <span class="number">214</span>, <span class="number">99</span>, <span class="number">231</span>, <span class="number">255</span>, <span class="number">84</span>, <span class="number">85</span>, <span class="number">138</span>, <span class="number">242</span>, <span class="number">91</span>, <span class="number">150</span>, <span class="number">25</span>, <span class="number">222</span>, <span class="number">156</span>, <span class="number">248</span>, <span class="number">48</span>, <span class="number">108</span>, <span class="number">252</span>, <span class="number">79</span>, <span class="number">107</span>, <span class="number">230</span>, <span class="number">38</span>, <span class="number">55</span>, <span class="number">132</span>, <span class="number">54</span>, <span class="number">186</span>, <span class="number">45</span>, <span class="number">173</span>, <span class="number">80</span>, <span class="number">134</span>, <span class="number">232</span>, <span class="number">60</span>, <span class="number">240</span>, <span class="number">4</span>, <span class="number">102</span>, <span class="number">95</span>, <span class="number">122</span>, <span class="number">18</span>, <span class="number">136</span>, <span class="number">229</span>, <span class="number">140</span>, <span class="number">3</span>, <span class="number">216</span>, <span class="number">100</span>, <span class="number">87</span>, <span class="number">75</span>, <span class="number">0</span>, <span class="number">31</span>, <span class="number">185</span>, <span class="number">28</span>, <span class="number">97</span>, <span class="number">46</span>, <span class="number">241</span>, <span class="number">219</span>, <span class="number">213</span>,gg <span class="number">59</span>, <span class="number">177</span>, <span class="number">57</span>, <span class="number">203</span>, <span class="number">163</span>, <span class="number">165</span>, <span class="number">19</span>, <span class="number">176</span>, <span class="number">13</span>, <span class="number">119</span>, <span class="number">27</span>, <span class="number">58</span>]:</span><br><span class="line">		m = <span class="string">''</span>.join([chr(ord(c[__])^k[__]) <span class="keyword">for</span> __ <span class="keyword">in</span> range(len(c))])</span><br><span class="line">		print(m)</span><br><span class="line">		<span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+
+<p><code>hgame{Oooooo00__reVEr$e~THE~PrGa+OF+rC4++OO000O0O}</code></p>
+<h2 id="RSA-solved"><a href="#RSA-solved" class="headerlink" title="RSA? | solved"></a>RSA? | solved</h2><p>本质签到题，难度全靠骗</p>
+<p>发现 $n$ 是质数，且 $n\equiv3(\mod4)$，直接用结论：<br>若 $m^2\equiv c (\mod n)$, 则 $m\equiv c^\frac{n+1}{4}(\mod n)$</p>
+<p>想了很久 $q$ 怎么用，结果发现给出 $q$ 只是为了唬人</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> long_to_bytes</span><br><span class="line">c =  <span class="number">2166906408965390116437761185603075699086315246646982132520792868301615462732707695943058783211233589602162482847874299962577512765886861573898075548033678</span></span><br><span class="line">e =  <span class="number">2</span></span><br><span class="line">q =  <span class="number">95476159140358852660572143425801843414366266400633576268276298731539374363607</span></span><br><span class="line">n =  <span class="number">7236834786093916009325417235344284284391050287273422058348241360770131423240807259717864686885012301293921328397391157761688776563780348734483657156421779</span></span><br><span class="line">m = pow(c, (n + <span class="number">1</span>) // <span class="number">4</span>, n)</span><br><span class="line">print(str(long_to_bytes(m),encoding=<span class="string">'utf-8'</span>))</span><br></pre></td></tr></table></figure>
+
+<p><code>hgame{eaa5262c-4631-46ef-a97b-53277ab7e1d8}</code></p>
+<h2 id="ToyCipher-XorShift-solved"><a href="#ToyCipher-XorShift-solved" class="headerlink" title="ToyCipher_XorShift | solved"></a>ToyCipher_XorShift | solved</h2><p>难得拿了二血，可能大家被分值吓到了？</p>
+<p>本质码农模拟题。XorShift密码本身就是可逆的，逆着写就好了……</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> long_to_bytes</span><br><span class="line"></span><br><span class="line">BLOCKSIZE = <span class="number">8</span></span><br><span class="line">BITSLENGTH = <span class="number">8</span>*BLOCKSIZE</span><br><span class="line">MASK = (<span class="number">1</span> &lt;&lt; BITSLENGTH) - <span class="number">1</span></span><br><span class="line"></span><br><span class="line">BLOCKS = <span class="keyword">lambda</span> data: [ bytes(data[i*BLOCKSIZE:(i+<span class="number">1</span>)*BLOCKSIZE]) <span class="keyword">for</span> i <span class="keyword">in</span> range(len(data)//BLOCKSIZE) ]</span><br><span class="line">XOR = <span class="keyword">lambda</span> s1, s2: bytes([x^y <span class="keyword">for</span> x,y <span class="keyword">in</span> zip(s1, s2)])</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">binget</span><span class="params">(x, h, l)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> x &amp; (((<span class="number">1</span> &lt;&lt; h) - <span class="number">1</span>)  ^ ((<span class="number">1</span> &lt;&lt; l) - <span class="number">1</span>))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">g</span><span class="params">(x, a, shr=True)</span>:</span></span><br><span class="line">    x = x &amp; MASK</span><br><span class="line">    a = a % BITSLENGTH</span><br><span class="line">    <span class="keyword">if</span> shr:</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(BITSLENGTH // a):</span><br><span class="line">            x ^= binget(x, BITSLENGTH - i * a, BITSLENGTH - (i + <span class="number">1</span>) * a) &gt;&gt; a</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(BITSLENGTH // a):</span><br><span class="line">            x ^= binget(x, (i + <span class="number">1</span>) * a, i * a) &lt;&lt; a</span><br><span class="line">    <span class="keyword">return</span> x &amp; MASK</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dec</span><span class="params">(block)</span>:</span></span><br><span class="line">    block = int.from_bytes(block, byteorder=<span class="string">'big'</span>)</span><br><span class="line">    block = g(block, <span class="number">17</span>, shr=<span class="literal">False</span>)</span><br><span class="line">    block = g(block,  <span class="number">7</span>, shr=<span class="literal">True</span> )</span><br><span class="line">    block = g(block, <span class="number">13</span>, shr=<span class="literal">False</span>)</span><br><span class="line">    <span class="keyword">return</span> block.to_bytes(BLOCKSIZE, byteorder=<span class="string">'big'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">decrypt</span><span class="params">(cipher, iv, unpad=False)</span>:</span></span><br><span class="line">    <span class="keyword">assert</span> len(cipher)%BLOCKSIZE == <span class="number">0</span></span><br><span class="line">    mid = iv</span><br><span class="line">    msg = <span class="string">b''</span></span><br><span class="line">    <span class="keyword">for</span> block <span class="keyword">in</span> BLOCKS(cipher):</span><br><span class="line">        msg += XOR(dec(block), mid)</span><br><span class="line">        mid = block</span><br><span class="line">    <span class="keyword">return</span> msg</span><br><span class="line"></span><br><span class="line">IV = <span class="string">b'c8C~M0d3'</span></span><br><span class="line">cipher = <span class="number">0x15eb80358fe6f89b1802a5f3eb5a6ec6c33dc4f35822fb6e97e0b22be860a28602b35e2930a93ac5</span></span><br><span class="line">print(decrypt(long_to_bytes(cipher),IV))</span><br></pre></td></tr></table></figure>
+
+<p><code>hgame{tHi$+4lgOr1thM_i5_3@sY-t0~b2EaK}</code></p>
+<h2 id="Exchange-solved"><a href="#Exchange-solved" class="headerlink" title="Exchange | solved"></a>Exchange | solved</h2><p>好恶心的题，调了一下午</p>
+<p>数学上不难，在双方交换 $A,B$ 时向双方分别发送错误的 $A’=B’=g^2$</p>
+<p>这样双方计算得到的 $S_a=A^2,S_b=B^2$</p>
+<p>那么我们得知 $C_b’$ 后即可计算 $m_b\equiv C_b’B^{-2}(\mod p)$</p>
+<p>需要注意的是Alice若收到错误的信息就不会发出 $C_a’$ 了， 因此需要将 Bob 发给她的信息改为 $C_b’’=m_bA^2\mod p$, 这样得到 $C_a$ 后即可计算 $m_a\equiv C_a’A^{-2}(\mod p)$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> hashlib <span class="keyword">import</span> sha256</span><br><span class="line"><span class="keyword">from</span> itertools <span class="keyword">import</span> product</span><br><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> reduce</span><br><span class="line"><span class="keyword">from</span> operator <span class="keyword">import</span> add</span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> gmpy2 <span class="keyword">import</span> invert <span class="keyword">as</span> inv</span><br><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> long_to_bytes	</span><br><span class="line"></span><br><span class="line">sh = remote(<span class="string">"47.98.192.231"</span>,<span class="number">25258</span>)</span><br><span class="line">msg1=str(sh.recv(), encoding=<span class="string">"utf8"</span>)</span><br><span class="line">print(msg1,end=<span class="string">''</span>)</span><br><span class="line">print(str(sh.recv(), encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br><span class="line">ch = [chr(i) <span class="keyword">for</span> i <span class="keyword">in</span> list(range(<span class="number">48</span>,<span class="number">58</span>))+list(range(<span class="number">65</span>,<span class="number">91</span>))+list(range(<span class="number">97</span>,<span class="number">123</span>))]</span><br><span class="line">c1 = msg1[<span class="number">12</span>:<span class="number">28</span>]</span><br><span class="line">c2 = msg1[<span class="number">33</span>:<span class="number">-1</span>]</span><br><span class="line"><span class="keyword">for</span> s <span class="keyword">in</span> product(ch, repeat = <span class="number">4</span>):</span><br><span class="line">	<span class="keyword">if</span>(sha256(bytes(reduce(add, s) + c1, encoding = <span class="string">"utf8"</span>)).hexdigest() == c2):</span><br><span class="line">		print(reduce(add, s))</span><br><span class="line">		sh.sendline(reduce(add, s))</span><br><span class="line">		<span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">print(str(sh.recv(), encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br><span class="line">print(str(sh.recv(), encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br><span class="line">print(<span class="string">""</span>)</span><br><span class="line">sh.sendline(<span class="string">""</span>)</span><br><span class="line">print(str(sh.recv(), encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br><span class="line">msg2 = sh.recv()</span><br><span class="line">print(str(msg2, encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br><span class="line">p = int(msg2[msg2.find(<span class="string">b'Alice: p = '</span>) + <span class="number">11</span>:msg2.find(<span class="string">b'Alice: g = '</span>) - <span class="number">1</span>])</span><br><span class="line">g = int(msg2[msg2.find(<span class="string">b'Alice: g = '</span>) + <span class="number">11</span>:])</span><br><span class="line">print(<span class="string">""</span>)</span><br><span class="line">sh.sendline(<span class="string">""</span>)</span><br><span class="line">print(str(sh.recv(), encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br><span class="line">print(str(sh.recv(), encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br><span class="line">print(<span class="string">""</span>)</span><br><span class="line">sh.sendline(<span class="string">""</span>)</span><br><span class="line">print(str(sh.recv(), encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br><span class="line">msg3 = sh.recv()</span><br><span class="line">print(str(msg3, encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br><span class="line">A = int(msg3[msg3.find(<span class="string">b'A = '</span>) + <span class="number">4</span>:msg3.find(<span class="string">b'[WARNING] : Do you want to modify this message? (yes/no)'</span>)])</span><br><span class="line">print(<span class="string">"yes"</span>)</span><br><span class="line">sh.sendline(<span class="string">"yes"</span>)</span><br><span class="line">print(str(sh.recv(), encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br><span class="line">print(str(sh.recv(), encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br><span class="line">print(pow(g,<span class="number">2</span>,p))</span><br><span class="line">sh.sendline(str(pow(g,<span class="number">2</span>,p)))</span><br><span class="line">print(str(sh.recv(), encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br><span class="line">print(str(sh.recv(), encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br><span class="line">print(<span class="string">""</span>)</span><br><span class="line">sh.sendline(<span class="string">""</span>)</span><br><span class="line">print(str(sh.recv(), encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br><span class="line">msg4 = sh.recv()</span><br><span class="line">print(str(msg4, encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br><span class="line">B = int(msg4[msg4.find(<span class="string">b'B = '</span>) + <span class="number">4</span>:msg4.find(<span class="string">b'[WARNING] : Do you want to modify this message? (yes/no)'</span>)])</span><br><span class="line">print(<span class="string">"yes"</span>)</span><br><span class="line">sh.sendline(<span class="string">"yes"</span>)</span><br><span class="line">print(str(sh.recv(), encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br><span class="line">print(str(sh.recv(), encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br><span class="line">print(pow(g,<span class="number">2</span>,p))</span><br><span class="line">sh.sendline(str(pow(g,<span class="number">2</span>,p)))</span><br><span class="line">print(str(sh.recv(), encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br><span class="line">print(str(sh.recv(), encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br><span class="line">print(<span class="string">""</span>)</span><br><span class="line">sh.sendline(<span class="string">""</span>)</span><br><span class="line">print(str(sh.recv(), encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br><span class="line">print(str(sh.recv(), encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>) </span><br><span class="line">print(<span class="string">""</span>)</span><br><span class="line">sh.sendline(<span class="string">""</span>)</span><br><span class="line">print(str(sh.recv(), encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br><span class="line">print(str(sh.recv(), encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>) </span><br><span class="line">print(<span class="string">""</span>)</span><br><span class="line">sh.sendline(<span class="string">""</span>)</span><br><span class="line">print(str(sh.recv(), encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br><span class="line">print(str(sh.recv(), encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>) </span><br><span class="line">print(<span class="string">""</span>)</span><br><span class="line">sh.sendline(<span class="string">""</span>)</span><br><span class="line">print(str(sh.recv(), encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br><span class="line">msg5 = sh.recv()</span><br><span class="line">print(str(msg5, encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br><span class="line">C_b = int(msg5[msg5.find(<span class="string">b'C_b = '</span>) + <span class="number">6</span>:msg5.find(<span class="string">b'[WARNING] : Do you want to modify this message? (yes/no)'</span>)])</span><br><span class="line">m_b = ( C_b * inv( pow(B, <span class="number">2</span>, p) , p) ) % p</span><br><span class="line">print(<span class="string">"yes"</span>)</span><br><span class="line">sh.sendline(<span class="string">"yes"</span>)</span><br><span class="line">print(str(sh.recv(), encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br><span class="line">print(str(sh.recv(), encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br><span class="line">print( ( m_b * pow(A, <span class="number">2</span>, p) ) % p)</span><br><span class="line">sh.sendline( str( ( m_b * pow(A, <span class="number">2</span>, p) ) % p ) )</span><br><span class="line">print(str(sh.recv(), encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br><span class="line">msg6 = sh.recv()</span><br><span class="line">print(str(msg6, encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br><span class="line">C_a = int(msg6[msg6.find(<span class="string">b'C_a = '</span>) + <span class="number">6</span>:])</span><br><span class="line">m_a = ( C_a * inv( pow(A, <span class="number">2</span>, p) , p) ) % p</span><br><span class="line">print(<span class="string">""</span>)</span><br><span class="line">sh.sendline(<span class="string">""</span>)</span><br><span class="line">print(str(sh.recv(), encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br><span class="line">flag = long_to_bytes(m_a) + long_to_bytes(m_b)</span><br><span class="line">print(str(flag, encoding=<span class="string">'utf-8'</span>))</span><br></pre></td></tr></table></figure>
+
+<p><code>hgame{Wow!+U_d0_tH3_m@N-1n~ThE+miDd!3_4TtAck~}</code></p>
+<h2 id="Feedback-solved"><a href="#Feedback-solved" class="headerlink" title="Feedback | solved"></a>Feedback | solved</h2><p>这题思维难度确实挺大的，想了一天了才恍然大悟QwQ</p>
+<p>第一次连接服务器：由于 CFB 的特点，$K_1$ 是可以直接通过 $c_1\oplus m_1$ 得到的，这样得到 $M_1=C_1\oplus K_1$</p>
+<p>第二次连接服务器：首先用前述方法求出此次连接的 $K_1$. 对于 $K_2$ 不同的明文得出的就不一样了，所以需要取 $c_2=\text{encrypt}(M_1)+\text{urandom(16)}$ ，这样就可以得到 $C_1$ 所对应的 $K_2=c_2[16:]\oplus m_2[16:]$, 并得到 $M_2=C_2\oplus K_2$</p>
+<p>第三次连接服务器：同理，求出 $K3,M3$</p>
+<p>下面贴的脚本是第三次连接服务器的脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os, random</span><br><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> bytes_to_long, long_to_bytes</span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">XOR = <span class="keyword">lambda</span> s1, s2: bytes([x^y <span class="keyword">for</span> x,y <span class="keyword">in</span> zip(s1, s2)])</span><br><span class="line"></span><br><span class="line">sh = remote(<span class="string">"47.98.192.231"</span>, <span class="number">25147</span>)</span><br><span class="line"></span><br><span class="line">print(str(sh.recv(),encoding=<span class="string">'utf-8'</span>),end=<span class="string">''</span>)</span><br><span class="line"></span><br><span class="line">print(str(sh.recv(),encoding=<span class="string">'utf-8'</span>),end=<span class="string">''</span>)</span><br><span class="line">c1 = os.urandom(<span class="number">16</span>)</span><br><span class="line">print(hex(bytes_to_long(c1))[<span class="number">2</span>:])</span><br><span class="line">sh.sendline(hex(bytes_to_long(c1))[<span class="number">2</span>:])</span><br><span class="line">msg1 = sh.recv()</span><br><span class="line">print(str(msg1,encoding=<span class="string">'utf-8'</span>),end=<span class="string">''</span>)</span><br><span class="line">m1 = long_to_bytes(int(<span class="string">b'0x'</span>+msg1, <span class="number">16</span>))</span><br><span class="line">K1 = XOR(c1, m1)</span><br><span class="line"></span><br><span class="line">print(str(sh.recv(),encoding=<span class="string">'utf-8'</span>),end=<span class="string">''</span>)</span><br><span class="line">c2 = XOR(<span class="string">b'FLAG is hgame&#123;51'</span>, K1) + os.urandom(<span class="number">16</span>)</span><br><span class="line">print(hex(bytes_to_long(c2))[<span class="number">2</span>:])</span><br><span class="line">sh.sendline(hex(bytes_to_long(c2))[<span class="number">2</span>:])</span><br><span class="line">msg2 = sh.recv()</span><br><span class="line">print(str(msg2,encoding=<span class="string">'utf-8'</span>),end=<span class="string">''</span>)</span><br><span class="line">m2 = long_to_bytes(int(<span class="string">b'0x'</span>+msg2, <span class="number">16</span>))</span><br><span class="line">K2 = XOR(c2[<span class="number">16</span>:], m2[<span class="number">16</span>:])</span><br><span class="line"></span><br><span class="line">print(str(sh.recv(),encoding=<span class="string">'utf-8'</span>),end=<span class="string">''</span>)</span><br><span class="line">c3 = XOR(<span class="string">b'b72d4cd23b2fe672'</span>, K2) + os.urandom(<span class="number">16</span>)</span><br><span class="line">print(hex(bytes_to_long(c3))[<span class="number">2</span>:])</span><br><span class="line">sh.sendline(hex(bytes_to_long(c3))[<span class="number">2</span>:])</span><br><span class="line">msg3 = sh.recv()</span><br><span class="line">msg4 = msg3[msg3.find(<span class="string">b'\n'</span>) + <span class="number">1</span>:]</span><br><span class="line">msg3 = msg3[:msg3.find(<span class="string">b'\n'</span>)]</span><br><span class="line">print(str(msg3,encoding=<span class="string">'utf-8'</span>),end=<span class="string">''</span>)</span><br><span class="line">m3 = long_to_bytes(int(<span class="string">b'0x'</span>+msg3, <span class="number">16</span>))</span><br><span class="line">K3 = XOR(c3[<span class="number">16</span>:], m3[<span class="number">16</span>:])</span><br><span class="line"></span><br><span class="line">print(str(msg4,encoding=<span class="string">'utf-8'</span>),end=<span class="string">''</span>)</span><br><span class="line">flag = long_to_bytes(int(<span class="string">b'0x'</span>+msg4[<span class="number">34</span>:], <span class="number">16</span>))</span><br><span class="line">print(str(XOR(flag, K1 + K2 + K3),encoding=<span class="string">'utf-8'</span>))</span><br></pre></td></tr></table></figure>
+
+<p><code>hgame{51b72d4cd23b2fe672a874cb44020868}</code></p>
+<h2 id="CBCBC-solved"><a href="#CBCBC-solved" class="headerlink" title="CBCBC | solved"></a>CBCBC | solved</h2><p>分析加密流程发现：往密文上第 $i$ 个 byte 异或一个数，则解密出的明文上第 $i+32$ 个 byte 也异或上该数。用此方法可以得到一切想要的明文的密文。</p>
+<p>Oracle 提供一个检测密文 padding 是否合法的方法，因此从后往前对每一个 byte, 猜测该 byte 的值，将该 byte 及之后的都填充成相应的 padding，如果猜对了则解密出来的明文 padding 合法，从而猜出明文的所有 byte。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os, random</span><br><span class="line"><span class="keyword">from</span> hashlib <span class="keyword">import</span> sha256</span><br><span class="line"><span class="keyword">from</span> itertools <span class="keyword">import</span> product</span><br><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> reduce</span><br><span class="line"><span class="keyword">from</span> operator <span class="keyword">import</span> add</span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> math <span class="keyword">import</span> gcd</span><br><span class="line"><span class="keyword">from</span> gmpy2 <span class="keyword">import</span> invert <span class="keyword">as</span> inv</span><br><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> bytes_to_long, long_to_bytes</span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">BLOCKS = <span class="keyword">lambda</span> data: [data[<span class="number">16</span>*i:<span class="number">16</span>*(i+<span class="number">1</span>)] <span class="keyword">for</span> i <span class="keyword">in</span> range(len(data)//<span class="number">16</span>)]</span><br><span class="line">XOR = <span class="keyword">lambda</span> s1, s2: bytes([x^y <span class="keyword">for</span> x,y <span class="keyword">in</span> zip(s1, s2)])</span><br><span class="line">BLOCKSIZE = <span class="number">16</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">pad</span><span class="params">(data)</span>:</span></span><br><span class="line">	pad_len = BLOCKSIZE - (len(data) % BLOCKSIZE)</span><br><span class="line">	<span class="keyword">return</span> data + bytes( [pad_len] * pad_len )</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">unpad</span><span class="params">(data)</span>:</span></span><br><span class="line">	pad_len = data[<span class="number">-1</span>]</span><br><span class="line">	_data = data[:-pad_len]</span><br><span class="line">	<span class="keyword">if</span> pad(_data) != data:</span><br><span class="line">		<span class="keyword">raise</span> ValueError(<span class="string">'Padding is incorrect.'</span>)</span><br><span class="line">	<span class="keyword">return</span> _data</span><br><span class="line"></span><br><span class="line">sh = remote(<span class="string">"47.98.192.231"</span>, <span class="number">25371</span>)</span><br><span class="line">msg1=str(sh.recv(), encoding=<span class="string">"utf8"</span>)</span><br><span class="line">print(msg1,end=<span class="string">''</span>)</span><br><span class="line">print(str(sh.recv(), encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br><span class="line">ch = [chr(i) <span class="keyword">for</span> i <span class="keyword">in</span> list(range(<span class="number">48</span>,<span class="number">58</span>))+list(range(<span class="number">65</span>,<span class="number">91</span>))+list(range(<span class="number">97</span>,<span class="number">123</span>))]</span><br><span class="line">c1 = msg1[<span class="number">12</span>:<span class="number">28</span>]</span><br><span class="line">c2 = msg1[<span class="number">33</span>:<span class="number">-1</span>]</span><br><span class="line"><span class="keyword">for</span> s <span class="keyword">in</span> product(ch, repeat = <span class="number">4</span>):</span><br><span class="line">	<span class="keyword">if</span>(sha256(bytes(reduce(add, s) + c1, encoding = <span class="string">"utf8"</span>)).hexdigest() == c2):</span><br><span class="line">		print(reduce(add, s))</span><br><span class="line">		sh.sendline(reduce(add, s))</span><br><span class="line">		<span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">print(str(sh.recv(), encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br><span class="line">msg2 = sh.recv()</span><br><span class="line">print(str(msg2, encoding=<span class="string">"utf8"</span>),end=<span class="string">''</span>)</span><br><span class="line">flag_cipher = long_to_bytes(int(<span class="string">b'0x'</span>+msg2[:msg2.find(<span class="string">b'\n'</span>)], <span class="number">16</span>))</span><br><span class="line"></span><br><span class="line">CHARSET = <span class="string">"""0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz&#123;&#125;"""</span></span><br><span class="line"></span><br><span class="line">flag = [<span class="number">0</span>]*<span class="number">60</span>+[<span class="number">4</span>]*<span class="number">4</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">59</span>,<span class="number">-1</span>,<span class="number">-1</span>):</span><br><span class="line">	pad_len = <span class="number">16</span> - i % <span class="number">16</span></span><br><span class="line">	<span class="keyword">for</span> c <span class="keyword">in</span> CHARSET:</span><br><span class="line">		cipher = flag_cipher[:i]+XOR(flag_cipher[i:i+pad_len],XOR(bytes([ord(c)]+flag[i+<span class="number">1</span>:]),bytes([pad_len]*pad_len)))+flag_cipher[i+pad_len:i+pad_len+<span class="number">32</span>]</span><br><span class="line">		sh.sendline(hex(bytes_to_long(cipher))[<span class="number">2</span>:])</span><br><span class="line">		msg = sh.recv()</span><br><span class="line">		<span class="keyword">if</span> msg[<span class="number">0</span>]==<span class="number">100</span>:</span><br><span class="line">			flag[i] = ord(c)</span><br><span class="line">			sh.recv()</span><br><span class="line">			<span class="keyword">break</span>	</span><br><span class="line">		sh.recv()</span><br><span class="line">print(unpad(bytes(flag)))</span><br></pre></td></tr></table></figure>
+
+<p><code>hgame{I_like_Padding_oracle_attack_6f64ab73204ff3fe89fd90a2}</code></p>
+<h2 id="ToyCipher-Linear-solved"><a href="#ToyCipher-Linear-solved" class="headerlink" title="ToyCipher_Linear | solved"></a>ToyCipher_Linear | solved</h2><p>设 $F(x)=x&lt;&lt;&lt;7\oplus x&lt;&lt;&lt;2$</p>
+<p>易证 $F$ 不可逆，但注意到 $F(a\oplus b)=F(a)\oplus F(b)$</p>
+<p>则 $c=\sigma(m)\oplus \mu(\text{key})$</p>
+<p>那么对于相同的 key, 每一块的 $\sigma(m)\oplus c=\mu(\text{key})$ 为定值, 而 $\sigma(m)$ 即为 key 为 0 时的密文。</p>
+<p>可以求出该定值，这样再将 flag 的密文分块异或上定值得到 key 为 0 时的密文，再调用 decrypt 函数解密即可。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> os, binascii</span><br><span class="line">XOR = <span class="keyword">lambda</span> s1, s2: bytes([x^y <span class="keyword">for</span> x,y <span class="keyword">in</span> zip(s1, s2)])</span><br><span class="line"><span class="comment">#from secret import flag</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">rotL</span><span class="params">(x, nbits, lbits)</span>:</span></span><br><span class="line">    mask = <span class="number">2</span>**nbits - <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> (x &lt;&lt; lbits%nbits) &amp; mask | ( (x &amp; mask) &gt;&gt; (-lbits % nbits) )</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">rotR</span><span class="params">(x, nbits, rbits)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> rotL(x, nbits, -rbits%nbits)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">keySchedule</span><span class="params">(masterkey)</span>:</span></span><br><span class="line">    roundKeys = [ ( rotR(masterkey, <span class="number">64</span>, <span class="number">16</span>*i) % <span class="number">2</span>**<span class="number">16</span> ) <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">12</span>) ]</span><br><span class="line">    <span class="keyword">return</span> roundKeys</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">(x, roundkey)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> rotL(x, <span class="number">16</span>, <span class="number">7</span>) ^ rotL(x, <span class="number">16</span>, <span class="number">2</span>) ^ roundkey</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ToyCipher</span><span class="params">(block, mode=<span class="string">'enc'</span>)</span>:</span></span><br><span class="line">    <span class="string">'''Feistel networks'''</span></span><br><span class="line">    roundKeys_ = ROUNDKEYS</span><br><span class="line">    <span class="keyword">if</span> mode == <span class="string">'dec'</span>:</span><br><span class="line">        roundKeys_ = roundKeys_[::<span class="number">-1</span>]</span><br><span class="line"></span><br><span class="line">    L, R = (block &gt;&gt; <span class="number">16</span>), (block % <span class="number">2</span>**<span class="number">16</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">12</span>):</span><br><span class="line">        _R = R</span><br><span class="line">        R = L ^ f( R, roundKeys_[i] )</span><br><span class="line">        L = _R</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> (R &lt;&lt; <span class="number">16</span>) | L</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">pad</span><span class="params">(data, blocksize)</span>:</span></span><br><span class="line">    pad_len = blocksize - (len(data) % blocksize)</span><br><span class="line">    <span class="keyword">return</span> data + bytes( [pad_len] * pad_len )</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">unpad</span><span class="params">(data, blocksize)</span>:</span></span><br><span class="line">    pad_len = data[<span class="number">-1</span>]</span><br><span class="line">    _data = data[:-pad_len]</span><br><span class="line">    <span class="keyword">assert</span> pad(_data, blocksize)==data, <span class="string">"Invalid padding."</span></span><br><span class="line">    <span class="keyword">return</span> _data</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">encrypt</span><span class="params">(plaintext)</span>:</span></span><br><span class="line">    <span class="string">'''ECB mode'''</span></span><br><span class="line">    plaintext = pad(plaintext, BLOCKSIZE)</span><br><span class="line">    ciphertext = <span class="string">b''</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range( len(plaintext) // BLOCKSIZE ):</span><br><span class="line">        block = plaintext[i*BLOCKSIZE:(i+<span class="number">1</span>)*BLOCKSIZE]</span><br><span class="line">        block = int.from_bytes(block, byteorder=<span class="string">'big'</span>)</span><br><span class="line">        E_block = ToyCipher(block)</span><br><span class="line">        ciphertext += E_block.to_bytes(BLOCKSIZE, byteorder=<span class="string">'big'</span>)</span><br><span class="line">    <span class="keyword">return</span> ciphertext</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">decrypt</span><span class="params">(ciphertext)</span>:</span></span><br><span class="line">    <span class="string">'''ECB mode'''</span></span><br><span class="line">    plaintext = <span class="string">b''</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range( len(ciphertext) // BLOCKSIZE ):</span><br><span class="line">        block = ciphertext[i*BLOCKSIZE:(i+<span class="number">1</span>)*BLOCKSIZE]</span><br><span class="line">        block = int.from_bytes(block, byteorder=<span class="string">'big'</span>)</span><br><span class="line">        D_block = ToyCipher(block, <span class="string">'dec'</span>)</span><br><span class="line">        plaintext += D_block.to_bytes(BLOCKSIZE, byteorder=<span class="string">'big'</span>)</span><br><span class="line">    plaintext = unpad(plaintext, BLOCKSIZE)</span><br><span class="line">    <span class="keyword">return</span> plaintext</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">masterkey = <span class="string">b'\0'</span>*<span class="number">8</span></span><br><span class="line">masterkey = int.from_bytes(masterkey, byteorder=<span class="string">'big'</span>)</span><br><span class="line">ROUNDKEYS = keySchedule(masterkey)</span><br><span class="line">BLOCKSIZE = <span class="number">4</span></span><br><span class="line"></span><br><span class="line">c0 = encrypt(<span class="string">b'just a test'</span>)</span><br><span class="line">c1 = <span class="string">b'\x91a\xb1o\xed_\xb2\x8c\x00\x1b\xdfp'</span></span><br><span class="line">C = XOR(c0,c1)[:<span class="number">4</span>]</span><br><span class="line">flag1 = <span class="string">b'\xe6\xf9\xda\xf0\xe18\xbc\xb4[\xfb\xbe\xd1\xfe\xa2\t\x8d\xdft:\xee\x1f\x1d\xe2q\xe5\x92/$#DL\x00\x1dD5@\x01W?!7CQ\xc16V\xb0\x14q)\xaa2'</span></span><br><span class="line">flag0 = <span class="string">b''</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(flag1)//BLOCKSIZE):</span><br><span class="line">	flag0 += XOR(C, flag1[i*BLOCKSIZE:(i+<span class="number">1</span>)*BLOCKSIZE])</span><br><span class="line">print(decrypt(flag0))</span><br></pre></td></tr></table></figure>
+
+<p><code>hgame{r0TAT!on_&amp;&amp;-x0r 4Re-b0tH~l1neaR_0pEr4t1On5}</code></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CTF/" rel="tag"># CTF</a>
+          
+            <a href="/tags/Crypto/" rel="tag"># Crypto</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/CNSS Recruit 2019 Crypto Writeup/" rel="next" title="CNSS Recruit 2019 Crypto Writeup">
+                <i class="fa fa-chevron-left"></i> CNSS Recruit 2019 Crypto Writeup
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="Virgil von Einzbern">
+          
+            <p class="site-author-name" itemprop="name">Virgil von Einzbern</p>
+            <p class="site-description motion-element" itemprop="description">An OI & Math & ACGN lover's blog</p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">53</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">53</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/zhangche0526" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:zhangche0526@gmail.com" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/zhangche0526" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/zhangche0526" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>zhihu</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://user.qzone.qq.com/2542128776" target="_blank" title="QQzone">
+                  
+                    <i class="fa fa-fw fa-globe"></i>QQzone</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://space.bilibili.com/7767985" target="_blank" title="bilibili">
+                  
+                    <i class="fa fa-fw fa-globe"></i>bilibili</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://www.zybuluo.com/KirinBill/note/878927" title="Kirin" target="_blank">Kirin</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://www.zybuluo.com/zzzc18/note/789450" title="zzzc18" target="_blank">zzzc18</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://pb0207.github.io/" title="PB" target="_blank">PB</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://prostkhala.github.io/" title="ST" target="_blank">ST</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#InfantRSA-solved"><span class="nav-number">1.</span> <span class="nav-text">InfantRSA | solved</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Affine-solved"><span class="nav-number">2.</span> <span class="nav-text">Affine | solved</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#not-One-time-solved"><span class="nav-number">3.</span> <span class="nav-text">not_One-time | solved</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reorder-solved"><span class="nav-number">4.</span> <span class="nav-text">Reorder | solved</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Verification-code-solved"><span class="nav-number">5.</span> <span class="nav-text">Verification_code | solved</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Remainder-solved"><span class="nav-number">6.</span> <span class="nav-text">Remainder | solved</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Inv-solved"><span class="nav-number">7.</span> <span class="nav-text">Inv | solved</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#notRC4-solved"><span class="nav-number">8.</span> <span class="nav-text">notRC4 | solved</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RSA-solved"><span class="nav-number">9.</span> <span class="nav-text">RSA? | solved</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ToyCipher-XorShift-solved"><span class="nav-number">10.</span> <span class="nav-text">ToyCipher_XorShift | solved</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Exchange-solved"><span class="nav-number">11.</span> <span class="nav-text">Exchange | solved</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Feedback-solved"><span class="nav-number">12.</span> <span class="nav-text">Feedback | solved</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CBCBC-solved"><span class="nav-number">13.</span> <span class="nav-text">CBCBC | solved</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ToyCipher-Linear-solved"><span class="nav-number">14.</span> <span class="nav-text">ToyCipher_Linear | solved</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Virgil von Einzbern</span>
+
+  
+</div>
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("rVR5kGyMpPkNsCG3Ki5IMKiM-gzGzoHsz", "lWTTT0pG9eDt8OhjKvB0Ede2");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
